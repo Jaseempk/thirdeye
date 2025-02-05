@@ -60,7 +60,7 @@ export async function getTokenHolders(
     const holders = response.raw.result.map((holder: any) => ({
       address: holder.owner_address || holder.address || "",
       balance: holder.balance || "0",
-      percentage: parseFloat(holder.percentage_relative_to_total_supply || "0"),
+      percentage: holder.percentage_relative_to_total_supply ? parseFloat(holder.percentage_relative_to_total_supply) : 0,
     }));
 
     return {
@@ -92,14 +92,14 @@ export async function getDeployerInfo(
     });
 
     // Filter for contract deployments
-    const deployments = (historyResponse.raw.result || []).filter((tx: any) => 
+    const deployments = (historyResponse.raw?.result || []).filter((tx: any) => 
       tx.to_address === null && tx.input !== "0x"
     );
 
     return {
       address: deployerAddress,
       totalDeployments: deployments.length,
-      netWorth: (netWorthResponse.raw.total_usd || "0").toString(),
+      netWorth: (netWorthResponse.raw?.total_usd || "0").toString(),
       previousTokens: deployments.map((tx: any) => tx.contract_address || "").filter(Boolean),
     };
   } catch (error: any) {
