@@ -1,4 +1,5 @@
 import { Holder, Deployer } from "@shared/schema";
+import Moralis from 'moralis';
 
 if (!process.env.MORALIS_API_KEY) {
   throw new Error("MORALIS_API_KEY is required");
@@ -11,6 +12,11 @@ if (!process.env.THEGRAPH_API_KEY) {
 const MORALIS_API_KEY = process.env.MORALIS_API_KEY;
 const THEGRAPH_API_KEY = process.env.THEGRAPH_API_KEY;
 const THEGRAPH_URL = `https://gateway.thegraph.com/api/${THEGRAPH_API_KEY}/subgraphs/id/bbWLZuPrmoskDaU64xycxZFE6EvSkMQALKkDpsz5ifF`;
+
+// Initialize Moralis
+await Moralis.start({
+  apiKey: MORALIS_API_KEY
+});
 
 export async function isTokenOnFlaunch(tokenAddress: string): Promise<boolean> {
   const query = `
@@ -37,79 +43,66 @@ export async function getTokenHolders(
   tokenAddress: string,
   chain = "base"
 ): Promise<{ holders: Holder[]; totalHolders: number }> {
-  const response = await fetch(
-    `https://deep-index.moralis.io/api/v2/erc20/${tokenAddress}/token_holders?chain=${chain}&limit=10`,
-    {
-      headers: {
-        accept: "application/json",
-        "X-API-Key": MORALIS_API_KEY,
-      },
-    }
-  );
+  try {
+    const response = await Moralis.EvmApi.token.getTokenOwners({
+      "chain": "0x2105", // Base chain ID
+      "order": "DESC",
+      "tokenAddress": tokenAddress,
+      "limit": 10
+    });
 
-  if (!response.ok) {
-    throw new Error(`Failed to fetch token holders: ${response.statusText}`);
+    const data = response.raw;
+    const totalSupply = data.total_supply;
+
+    const holders = data.result.map((holder: any) => ({
+      address: holder.owner_address,
+      balance: holder.balance,
+      percentage: Number(holder.percentage_relative_to_total_supply) || 0,
+    }));
+
+    return {
+      holders,
+      totalHolders: data.total || holders.length,
+    };
+  } catch (error: any) {
+    console.error("Error fetching token holders:", error);
+    throw new Error(`Failed to fetch token holders: ${error.message}`);
   }
-
-  const data = await response.json();
-  const totalSupply = data.total_supply;
-
-  const holders = data.result.map((holder: any) => ({
-    address: holder.address,
-    balance: holder.balance,
-    percentage: (Number(holder.balance) / Number(totalSupply)) * 100,
-  }));
-
-  return {
-    holders,
-    totalHolders: data.total,
-  };
 }
 
 export async function getDeployerInfo(
   deployerAddress: string,
   chain = "base"
 ): Promise<Deployer> {
-  // Get deployer's token contracts
-  const response = await fetch(
-    `https://deep-index.moralis.io/api/v2/${deployerAddress}/erc20?chain=${chain}`,
-    {
-      headers: {
-        accept: "application/json",
-        "X-API-Key": MORALIS_API_KEY,
-      },
-    }
-  );
+  try {
+    // Get wallet net worth
+    const netWorthResponse = await Moralis.EvmApi.wallets.getWalletNetWorth({
+      address: deployerAddress,
+      excludeSpam: true,
+      excludeUnverifiedContracts: true
+    });
 
-  if (!response.ok) {
-    throw new Error(`Failed to fetch deployer's tokens: ${response.statusText}`);
+    // Get wallet history for deployments
+    const historyResponse = await Moralis.EvmApi.wallets.getWalletHistory({
+      chain: "0x2105",
+      address: deployerAddress
+    });
+
+    // Filter for contract deployments
+    const deployments = historyResponse.raw.result.filter((tx: any) => 
+      tx.to_address === null && tx.input !== "0x"
+    );
+
+    return {
+      address: deployerAddress,
+      totalDeployments: deployments.length,
+      netWorth: netWorthResponse.raw.total_usd?.toString() || "0",
+      previousTokens: deployments.map((tx: any) => tx.contract_address).filter(Boolean),
+    };
+  } catch (error: any) {
+    console.error("Error fetching deployer info:", error);
+    throw new Error(`Failed to fetch deployer info: ${error.message}`);
   }
-
-  const data = await response.json();
-
-  // Get deployer's net worth (native token balance)
-  const balanceResponse = await fetch(
-    `https://deep-index.moralis.io/api/v2/${deployerAddress}/balance?chain=${chain}`,
-    {
-      headers: {
-        accept: "application/json",
-        "X-API-Key": MORALIS_API_KEY,
-      },
-    }
-  );
-
-  if (!balanceResponse.ok) {
-    throw new Error(`Failed to fetch deployer's balance: ${balanceResponse.statusText}`);
-  }
-
-  const balanceData = await balanceResponse.json();
-
-  return {
-    address: deployerAddress,
-    totalDeployments: data.length,
-    netWorth: balanceData.balance,
-    previousTokens: data.map((token: any) => token.token_address),
-  };
 }
 
 export function calculateScore(analysis: {
