@@ -51,13 +51,14 @@ export async function getTokenHolders(
       "limit": 10
     });
 
-    console.log("Token holders raw response:", JSON.stringify(response.raw, null, 2));
+    console.log("Token holders raw response:", JSON.stringify(response.toJSON(), null, 2));
 
-    if (!response.raw || !Array.isArray(response.raw.result)) {
+    const data = response.toJSON();
+    if (!data || !Array.isArray(data.result)) {
       throw new Error("Invalid response format from Moralis");
     }
 
-    const holders = response.raw.result.map((holder: any) => ({
+    const holders = data.result.map((holder: any) => ({
       address: holder.owner_address || holder.address || "",
       balance: holder.balance || "0",
       percentage: holder.percentage_relative_to_total_supply ? parseFloat(holder.percentage_relative_to_total_supply) : 0,
@@ -65,7 +66,7 @@ export async function getTokenHolders(
 
     return {
       holders,
-      totalHolders: response.raw.total || holders.length,
+      totalHolders: data.total || holders.length,
     };
   } catch (error: any) {
     console.error("Error fetching token holders:", error);
@@ -91,15 +92,18 @@ export async function getDeployerInfo(
       address: deployerAddress
     });
 
+    const netWorthData = netWorthResponse.toJSON();
+    const historyData = historyResponse.toJSON();
+
     // Filter for contract deployments
-    const deployments = (historyResponse.raw?.result || []).filter((tx: any) => 
+    const deployments = (historyData?.result || []).filter((tx: any) => 
       tx.to_address === null && tx.input !== "0x"
     );
 
     return {
       address: deployerAddress,
       totalDeployments: deployments.length,
-      netWorth: (netWorthResponse.raw?.total_usd || "0").toString(),
+      netWorth: (netWorthData?.total_usd || "0").toString(),
       previousTokens: deployments.map((tx: any) => tx.contract_address || "").filter(Boolean),
     };
   } catch (error: any) {
