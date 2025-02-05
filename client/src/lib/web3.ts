@@ -6,12 +6,12 @@ export async function connectWallet() {
   }
 
   await window.ethereum.request({ method: "eth_requestAccounts" });
-  
+
   const provider = new ethers.BrowserProvider(window.ethereum);
   const network = await provider.getNetwork();
-  
+
   // Base network chainId is 8453
-  if (network.chainId !== 8453n) {
+  if (Number(network.chainId) !== 8453) {
     throw new Error("Please connect to Base network");
   }
 

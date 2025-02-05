@@ -20,7 +20,14 @@ export class DatabaseStorage implements IStorage {
   async createAnalysis(insertAnalysis: InsertTokenAnalysis): Promise<TokenAnalysis> {
     const [analysis] = await db
       .insert(tokenAnalyses)
-      .values(insertAnalysis)
+      .values({
+        contractAddress: insertAnalysis.contractAddress,
+        tokenName: insertAnalysis.tokenName || null,
+        tokenSymbol: insertAnalysis.tokenSymbol || null,
+        analysis: insertAnalysis.analysis,
+        score: insertAnalysis.score,
+        createdAt: insertAnalysis.createdAt,
+      })
       .returning();
     return analysis;
   }

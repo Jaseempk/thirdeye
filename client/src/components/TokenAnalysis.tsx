@@ -19,21 +19,12 @@ export function TokenAnalysis() {
       const provider = new ethers.BrowserProvider(window.ethereum);
       const { name, symbol } = await getTokenInfo(address, provider);
 
-      // Simulate token analysis
-      const analysis = {
+      return apiRequest("POST", "/api/analyses", {
         contractAddress: address,
         tokenName: name,
         tokenSymbol: symbol,
-        analysis: {
-          holderCount: Math.floor(Math.random() * 1000),
-          liquidityScore: Math.floor(Math.random() * 100),
-          contractVerified: Math.random() > 0.5,
-        },
-        score: Math.floor(Math.random() * 100),
         createdAt: new Date().toISOString(),
-      };
-
-      return apiRequest("POST", "/api/analyses", analysis);
+      });
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["/api/analyses"] });
@@ -44,7 +35,9 @@ export function TokenAnalysis() {
   return (
     <Card className="w-full max-w-2xl mx-auto">
       <CardHeader>
-        <CardTitle className="text-center font-mono text-2xl">Token Analysis</CardTitle>
+        <CardTitle className="text-center font-mono text-2xl">
+          Flaunch Token Analysis
+        </CardTitle>
       </CardHeader>
       <CardContent>
         <div className="flex gap-4">
