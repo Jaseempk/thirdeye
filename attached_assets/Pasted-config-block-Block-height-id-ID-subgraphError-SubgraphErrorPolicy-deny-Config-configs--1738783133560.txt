@@ -1,0 +1,554 @@
+config(
+block: Block_height
+id: ID!
+subgraphError: _SubgraphErrorPolicy_! = deny
+): Config
+configs(
+block: Block_height
+first: Int = 100
+orderBy: Config_orderBy
+orderDirection: OrderDirection
+skip: Int = 0
+subgraphError: _SubgraphErrorPolicy_! = deny
+where: Config_filter
+): [Config!]!
+user(
+block: Block_height
+id: ID!
+subgraphError: _SubgraphErrorPolicy_! = deny
+): User
+users(
+block: Block_height
+first: Int = 100
+orderBy: User_orderBy
+orderDirection: OrderDirection
+skip: Int = 0
+subgraphError: _SubgraphErrorPolicy_! = deny
+where: User_filter
+): [User!]!
+userAggregate(
+block: Block_height
+id: ID!
+subgraphError: _SubgraphErrorPolicy_! = deny
+): UserAggregate
+userAggregates(
+block: Block_height
+first: Int = 100
+orderBy: UserAggregate_orderBy
+orderDirection: OrderDirection
+skip: Int = 0
+subgraphError: _SubgraphErrorPolicy_! = deny
+where: UserAggregate_filter
+): [UserAggregate!]!
+tokenReferralFee(
+block: Block_height
+id: ID!
+subgraphError: _SubgraphErrorPolicy_! = deny
+): TokenReferralFee
+tokenReferralFees(
+block: Block_height
+first: Int = 100
+orderBy: TokenReferralFee_orderBy
+orderDirection: OrderDirection
+skip: Int = 0
+subgraphError: _SubgraphErrorPolicy_! = deny
+where: TokenReferralFee_filter
+): [TokenReferralFee!]!
+collectionTokenHolding(
+block: Block_height
+id: ID!
+subgraphError: _SubgraphErrorPolicy_! = deny
+): CollectionTokenHolding
+collectionTokenHoldings(
+block: Block_height
+first: Int = 100
+orderBy: CollectionTokenHolding_orderBy
+orderDirection: OrderDirection
+skip: Int = 0
+subgraphError: _SubgraphErrorPolicy_! = deny
+where: CollectionTokenHolding_filter
+): [CollectionTokenHolding!]!
+collectionTokenHoldingChange(
+block: Block_height
+id: ID!
+subgraphError: _SubgraphErrorPolicy_! = deny
+): CollectionTokenHoldingChange
+collectionTokenHoldingChanges(
+block: Block_height
+first: Int = 100
+orderBy: CollectionTokenHoldingChange_orderBy
+orderDirection: OrderDirection
+skip: Int = 0
+subgraphError: _SubgraphErrorPolicy_! = deny
+where: CollectionTokenHoldingChange_filter
+): [CollectionTokenHoldingChange!]!
+collectionHolding(
+block: Block_height
+id: ID!
+subgraphError: _SubgraphErrorPolicy_! = deny
+): CollectionHolding
+collectionHoldings(
+block: Block_height
+first: Int = 100
+orderBy: CollectionHolding_orderBy
+orderDirection: OrderDirection
+skip: Int = 0
+subgraphError: _SubgraphErrorPolicy_! = deny
+where: CollectionHolding_filter
+): [CollectionHolding!]!
+nftlookup(
+block: Block_height
+id: ID!
+subgraphError: _SubgraphErrorPolicy_! = deny
+): NFTLookup
+nftlookups(
+block: Block_height
+first: Int = 100
+orderBy: NFTLookup_orderBy
+orderDirection: OrderDirection
+skip: Int = 0
+subgraphError: _SubgraphErrorPolicy_! = deny
+where: NFTLookup_filter
+): [NFTLookup!]!
+poolCollectionLookup(
+block: Block_height
+id: ID!
+subgraphError: _SubgraphErrorPolicy_! = deny
+): PoolCollectionLookup
+poolCollectionLookups(
+block: Block_height
+first: Int = 100
+orderBy: PoolCollectionLookup_orderBy
+orderDirection: OrderDirection
+skip: Int = 0
+subgraphError: _SubgraphErrorPolicy_! = deny
+where: PoolCollectionLookup_filter
+): [PoolCollectionLookup!]!
+collection(
+block: Block_height
+id: ID!
+subgraphError: _SubgraphErrorPolicy_! = deny
+): Collection
+collections(
+block: Block_height
+first: Int = 100
+orderBy: Collection_orderBy
+orderDirection: OrderDirection
+skip: Int = 0
+subgraphError: _SubgraphErrorPolicy_! = deny
+where: Collection_filter
+): [Collection!]!
+collectionMetadata(
+block: Block_height
+id: ID!
+subgraphError: _SubgraphErrorPolicy_! = deny
+): CollectionMetadata
+collectionMetadata_collection(
+block: Block_height
+first: Int = 100
+orderBy: CollectionMetadata_orderBy
+orderDirection: OrderDirection
+skip: Int = 0
+subgraphError: _SubgraphErrorPolicy_! = deny
+where: CollectionMetadata_filter
+): [CollectionMetadata!]!
+collectionToken(
+block: Block_height
+id: ID!
+subgraphError: _SubgraphErrorPolicy_! = deny
+): CollectionToken
+collectionTokens(
+block: Block_height
+first: Int = 100
+orderBy: CollectionToken_orderBy
+orderDirection: OrderDirection
+skip: Int = 0
+subgraphError: _SubgraphErrorPolicy_! = deny
+where: CollectionToken_filter
+): [CollectionToken!]!
+bidWall(
+block: Block_height
+id: ID!
+subgraphError: _SubgraphErrorPolicy_! = deny
+): BidWall
+bidWalls(
+block: Block_height
+first: Int = 100
+orderBy: BidWall_orderBy
+orderDirection: OrderDirection
+skip: Int = 0
+subgraphError: _SubgraphErrorPolicy_! = deny
+where: BidWall_filter
+): [BidWall!]!
+bidWallDistribution(
+block: Block_height
+id: ID!
+subgraphError: _SubgraphErrorPolicy_! = deny
+): BidWallDistribution
+bidWallDistributions(
+block: Block_height
+first: Int = 100
+orderBy: BidWallDistribution_orderBy
+orderDirection: OrderDirection
+skip: Int = 0
+subgraphError: _SubgraphErrorPolicy_! = deny
+where: BidWallDistribution_filter
+): [BidWallDistribution!]!
+fairLaunch(
+block: Block_height
+id: ID!
+subgraphError: _SubgraphErrorPolicy_! = deny
+): FairLaunch
+fairLaunches(
+block: Block_height
+first: Int = 100
+orderBy: FairLaunch_orderBy
+orderDirection: OrderDirection
+skip: Int = 0
+subgraphError: _SubgraphErrorPolicy_! = deny
+where: FairLaunch_filter
+): [FairLaunch!]!
+feeDistribution(
+block: Block_height
+id: ID!
+subgraphError: _SubgraphErrorPolicy_! = deny
+): FeeDistribution
+feeDistributions(
+block: Block_height
+first: Int = 100
+orderBy: FeeDistribution_orderBy
+orderDirection: OrderDirection
+skip: Int = 0
+subgraphError: _SubgraphErrorPolicy_! = deny
+where: FeeDistribution_filter
+): [FeeDistribution!]!
+feeExemption(
+block: Block_height
+id: ID!
+subgraphError: _SubgraphErrorPolicy_! = deny
+): FeeExemption
+feeExemptions(
+block: Block_height
+first: Int = 100
+orderBy: FeeExemption_orderBy
+orderDirection: OrderDirection
+skip: Int = 0
+subgraphError: _SubgraphErrorPolicy_! = deny
+where: FeeExemption_filter
+): [FeeExemption!]!
+poolPremine(
+block: Block_height
+id: ID!
+subgraphError: _SubgraphErrorPolicy_! = deny
+): PoolPremine
+poolPremines(
+block: Block_height
+first: Int = 100
+orderBy: PoolPremine_orderBy
+orderDirection: OrderDirection
+skip: Int = 0
+subgraphError: _SubgraphErrorPolicy_! = deny
+where: PoolPremine_filter
+): [PoolPremine!]!
+referralEscrowAssigned(
+block: Block_height
+id: ID!
+subgraphError: _SubgraphErrorPolicy_! = deny
+): ReferralEscrowAssigned
+referralEscrowAssigneds(
+block: Block_height
+first: Int = 100
+orderBy: ReferralEscrowAssigned_orderBy
+orderDirection: OrderDirection
+skip: Int = 0
+subgraphError: _SubgraphErrorPolicy_! = deny
+where: ReferralEscrowAssigned_filter
+): [ReferralEscrowAssigned!]!
+referralEscrowClaimed(
+block: Block_height
+id: ID!
+subgraphError: _SubgraphErrorPolicy_! = deny
+): ReferralEscrowClaimed
+referralEscrowClaimeds(
+block: Block_height
+first: Int = 100
+orderBy: ReferralEscrowClaimed_orderBy
+orderDirection: OrderDirection
+skip: Int = 0
+subgraphError: _SubgraphErrorPolicy_! = deny
+where: ReferralEscrowClaimed_filter
+): [ReferralEscrowClaimed!]!
+referralEscrowSwapped(
+block: Block_height
+id: ID!
+subgraphError: _SubgraphErrorPolicy_! = deny
+): ReferralEscrowSwapped
+referralEscrowSwappeds(
+block: Block_height
+first: Int = 100
+orderBy: ReferralEscrowSwapped_orderBy
+orderDirection: OrderDirection
+skip: Int = 0
+subgraphError: _SubgraphErrorPolicy_! = deny
+where: ReferralEscrowSwapped_filter
+): [ReferralEscrowSwapped!]!
+pool(
+block: Block_height
+id: ID!
+subgraphError: _SubgraphErrorPolicy_! = deny
+): Pool
+pools(
+block: Block_height
+first: Int = 100
+orderBy: Pool_orderBy
+orderDirection: OrderDirection
+skip: Int = 0
+subgraphError: _SubgraphErrorPolicy_! = deny
+where: Pool_filter
+): [Pool!]!
+feeAllocation(
+block: Block_height
+id: ID!
+subgraphError: _SubgraphErrorPolicy_! = deny
+): FeeAllocation
+feeAllocations(
+block: Block_height
+first: Int = 100
+orderBy: FeeAllocation_orderBy
+orderDirection: OrderDirection
+skip: Int = 0
+subgraphError: _SubgraphErrorPolicy_! = deny
+where: FeeAllocation_filter
+): [FeeAllocation!]!
+poolSwap(
+block: Block_height
+id: ID!
+subgraphError: _SubgraphErrorPolicy_! = deny
+): PoolSwap
+poolSwaps(
+block: Block_height
+first: Int = 100
+orderBy: PoolSwap_orderBy
+orderDirection: OrderDirection
+skip: Int = 0
+subgraphError: _SubgraphErrorPolicy_! = deny
+where: PoolSwap_filter
+): [PoolSwap!]!
+poolFees(
+block: Block_height
+id: ID!
+subgraphError: _SubgraphErrorPolicy_! = deny
+): PoolFees
+poolFees_collection(
+block: Block_height
+first: Int = 100
+orderBy: PoolFees_orderBy
+orderDirection: OrderDirection
+skip: Int = 0
+subgraphError: _SubgraphErrorPolicy_! = deny
+where: PoolFees_filter
+): [PoolFees!]!
+poolFeeDistribution(
+block: Block_height
+id: ID!
+subgraphError: _SubgraphErrorPolicy_! = deny
+): PoolFeeDistribution
+poolFeeDistributions(
+block: Block_height
+first: Int = 100
+orderBy: PoolFeeDistribution_orderBy
+orderDirection: OrderDirection
+skip: Int = 0
+subgraphError: _SubgraphErrorPolicy_! = deny
+where: PoolFeeDistribution_filter
+): [PoolFeeDistribution!]!
+userFee(
+block: Block_height
+id: ID!
+subgraphError: _SubgraphErrorPolicy_! = deny
+): UserFee
+userFees(
+block: Block_height
+first: Int = 100
+orderBy: UserFee_orderBy
+orderDirection: OrderDirection
+skip: Int = 0
+subgraphError: _SubgraphErrorPolicy_! = deny
+where: UserFee_filter
+): [UserFee!]!
+userFeeClaimed(
+block: Block_height
+id: ID!
+subgraphError: _SubgraphErrorPolicy_! = deny
+): UserFeeClaimed
+userFeeClaimeds(
+block: Block_height
+first: Int = 100
+orderBy: UserFeeClaimed_orderBy
+orderDirection: OrderDirection
+skip: Int = 0
+subgraphError: _SubgraphErrorPolicy_! = deny
+where: UserFeeClaimed_filter
+): [UserFeeClaimed!]!
+userCollectionFee(
+block: Block_height
+id: ID!
+subgraphError: _SubgraphErrorPolicy_! = deny
+): UserCollectionFee
+userCollectionFees(
+block: Block_height
+first: Int = 100
+orderBy: UserCollectionFee_orderBy
+orderDirection: OrderDirection
+skip: Int = 0
+subgraphError: _SubgraphErrorPolicy_! = deny
+where: UserCollectionFee_filter
+): [UserCollectionFee!]!
+referrerFee(
+block: Block_height
+id: ID!
+subgraphError: _SubgraphErrorPolicy_! = deny
+): ReferrerFee
+referrerFees(
+block: Block_height
+first: Int = 100
+orderBy: ReferrerFee_orderBy
+orderDirection: OrderDirection
+skip: Int = 0
+subgraphError: _SubgraphErrorPolicy_! = deny
+where: ReferrerFee_filter
+): [ReferrerFee!]!
+tokenDayData(
+block: Block_height
+id: ID!
+subgraphError: _SubgraphErrorPolicy_! = deny
+): TokenDayData
+tokenDayDatas(
+block: Block_height
+first: Int = 100
+orderBy: TokenDayData_orderBy
+orderDirection: OrderDirection
+skip: Int = 0
+subgraphError: _SubgraphErrorPolicy_! = deny
+where: TokenDayData_filter
+): [TokenDayData!]!
+tokenHourData(
+block: Block_height
+id: ID!
+subgraphError: _SubgraphErrorPolicy_! = deny
+): TokenHourData
+tokenHourDatas(
+block: Block_height
+first: Int = 100
+orderBy: TokenHourData_orderBy
+orderDirection: OrderDirection
+skip: Int = 0
+subgraphError: _SubgraphErrorPolicy_! = deny
+where: TokenHourData_filter
+): [TokenHourData!]!
+tokenMinuteData(
+block: Block_height
+id: ID!
+subgraphError: _SubgraphErrorPolicy_! = deny
+): TokenMinuteData
+tokenMinuteDatas(
+block: Block_height
+first: Int = 100
+orderBy: TokenMinuteData_orderBy
+orderDirection: OrderDirection
+skip: Int = 0
+subgraphError: _SubgraphErrorPolicy_! = deny
+where: TokenMinuteData_filter
+): [TokenMinuteData!]!
+tokenSecondData(
+block: Block_height
+id: ID!
+subgraphError: _SubgraphErrorPolicy_! = deny
+): TokenSecondData
+tokenSecondDatas(
+block: Block_height
+first: Int = 100
+orderBy: TokenSecondData_orderBy
+orderDirection: OrderDirection
+skip: Int = 0
+subgraphError: _SubgraphErrorPolicy_! = deny
+where: TokenSecondData_filter
+): [TokenSecondData!]!
+bidWallRepositioned(
+block: Block_height
+id: ID!
+subgraphError: _SubgraphErrorPolicy_! = deny
+): BidWallRepositioned
+bidWallRepositioneds(
+block: Block_height
+first: Int = 100
+orderBy: BidWallRepositioned_orderBy
+orderDirection: OrderDirection
+skip: Int = 0
+subgraphError: _SubgraphErrorPolicy_! = deny
+where: BidWallRepositioned_filter
+): [BidWallRepositioned!]!
+activity(
+block: Block_height
+id: ID!
+subgraphError: _SubgraphErrorPolicy_! = deny
+): Activity
+activities(
+block: Block_height
+first: Int = 100
+orderBy: Activity_orderBy
+orderDirection: OrderDirection
+skip: Int = 0
+subgraphError: _SubgraphErrorPolicy_! = deny
+where: Activity_filter
+): [Activity!]!
+memecoinTreasury(
+block: Block_height
+id: ID!
+subgraphError: _SubgraphErrorPolicy_! = deny
+): MemecoinTreasury
+memecoinTreasuries(
+block: Block_height
+first: Int = 100
+orderBy: MemecoinTreasury_orderBy
+orderDirection: OrderDirection
+skip: Int = 0
+subgraphError: _SubgraphErrorPolicy_! = deny
+where: MemecoinTreasury_filter
+): [MemecoinTreasury!]!
+memecoinTreasuryActivity(
+block: Block_height
+id: ID!
+subgraphError: _SubgraphErrorPolicy_! = deny
+): MemecoinTreasuryActivity
+memecoinTreasuryActivities(
+block: Block_height
+first: Int = 100
+orderBy: MemecoinTreasuryActivity_orderBy
+orderDirection: OrderDirection
+skip: Int = 0
+subgraphError: _SubgraphErrorPolicy_! = deny
+where: MemecoinTreasuryActivity_filter
+): [MemecoinTreasuryActivity!]!
+memecoinAction(
+block: Block_height
+id: ID!
+subgraphError: _SubgraphErrorPolicy_! = deny
+): MemecoinAction
+memecoinActions(
+block: Block_height
+first: Int = 100
+orderBy: MemecoinAction_orderBy
+orderDirection: OrderDirection
+skip: Int = 0
+subgraphError: _SubgraphErrorPolicy_! = deny
+where: MemecoinAction_filter
+): [MemecoinAction!]!
+tokenSearch(
+block: Block_height
+first: Int = 100
+skip: Int = 0
+subgraphError: _SubgraphErrorPolicy_! = deny
+text: String!
+where: CollectionMetadata_filter
+): [CollectionMetadata!]!

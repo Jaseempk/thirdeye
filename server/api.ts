@@ -15,7 +15,7 @@ const THEGRAPH_URL = `https://gateway.thegraph.com/api/${THEGRAPH_API_KEY}/subgr
 export async function isTokenOnFlaunch(tokenAddress: string): Promise<boolean> {
   const query = `
     query {
-      tokens(where: { id: "${tokenAddress.toLowerCase()}" }) {
+      pools(where: { id: "${tokenAddress.toLowerCase()}" }) {
         id
       }
     }
@@ -30,7 +30,7 @@ export async function isTokenOnFlaunch(tokenAddress: string): Promise<boolean> {
   });
 
   const data = await response.json();
-  return data.data.tokens.length > 0;
+  return data.data.pools.length > 0;
 }
 
 export async function getTokenHolders(
@@ -46,6 +46,10 @@ export async function getTokenHolders(
       },
     }
   );
+
+  if (!response.ok) {
+    throw new Error(`Failed to fetch token holders: ${response.statusText}`);
+  }
 
   const data = await response.json();
   const totalSupply = data.total_supply;
@@ -77,8 +81,12 @@ export async function getDeployerInfo(
     }
   );
 
+  if (!response.ok) {
+    throw new Error(`Failed to fetch deployer's tokens: ${response.statusText}`);
+  }
+
   const data = await response.json();
-  
+
   // Get deployer's net worth (native token balance)
   const balanceResponse = await fetch(
     `https://deep-index.moralis.io/api/v2/${deployerAddress}/balance?chain=${chain}`,
@@ -89,6 +97,10 @@ export async function getDeployerInfo(
       },
     }
   );
+
+  if (!balanceResponse.ok) {
+    throw new Error(`Failed to fetch deployer's balance: ${balanceResponse.statusText}`);
+  }
 
   const balanceData = await balanceResponse.json();
 

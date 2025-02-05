@@ -1,5 +1,5 @@
 import { WalletConnect } from "@/components/WalletConnect";
-import { TokenAnalysis } from "@/components/TokenAnalysis";
+import { TokenAnalysisForm } from "@/components/TokenAnalysis";
 import { AnalysisReport } from "@/components/AnalysisReport";
 
 export default function Home() {
@@ -15,7 +15,7 @@ export default function Home() {
       </header>
 
       <main className="container mx-auto px-4 py-8 space-y-8">
-        <TokenAnalysis />
+        <TokenAnalysisForm />
         <AnalysisReport />
       </main>
     </div>
