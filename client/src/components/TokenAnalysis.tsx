@@ -5,7 +5,7 @@ import { useState } from "react";
 import { ethers } from "ethers";
 import { getTokenInfo } from "@/lib/web3";
 import { useMutation } from "@tanstack/react-query";
-import { apiRequest } from "@/lib/queryClient";
+import { apiRequest, queryClient } from "@/lib/queryClient";
 import { Loader2 } from "lucide-react";
 
 export function TokenAnalysis() {
@@ -34,7 +34,11 @@ export function TokenAnalysis() {
       };
 
       return apiRequest("POST", "/api/analyses", analysis);
-    }
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["/api/analyses"] });
+      setAddress("");
+    },
   });
 
   return (

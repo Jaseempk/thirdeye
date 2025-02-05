@@ -4,10 +4,11 @@ import { TokenAnalysis } from "@shared/schema";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Progress } from "@/components/ui/progress";
 import { Skeleton } from "@/components/ui/skeleton";
+import { queryClient } from "@/lib/queryClient";
 
 export function AnalysisReport() {
   const { data: analyses, isLoading } = useQuery<TokenAnalysis[]>({
-    queryKey: ["/api/analyses"]
+    queryKey: ["/api/analyses"],
   });
 
   if (isLoading) {
@@ -35,10 +36,10 @@ export function AnalysisReport() {
           <CardContent>
             <Progress value={analysis.score} className="mb-4" />
             <div className="grid grid-cols-2 gap-4 text-sm">
-              <div>Contract: {analysis.contractAddress.slice(0, 10)}...</div>
+              <div className="font-mono">Contract: {analysis.contractAddress.slice(0, 10)}...</div>
               <div>Holders: {analysis.analysis.holderCount}</div>
               <div>Liquidity Score: {analysis.analysis.liquidityScore}/100</div>
-              <div>Verified: {analysis.analysis.contractVerified ? "Yes" : "No"}</div>
+              <div>Contract Verified: {analysis.analysis.contractVerified ? "Yes" : "No"}</div>
             </div>
           </CardContent>
         </Card>
