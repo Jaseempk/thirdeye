@@ -1,4 +1,6 @@
 import { tokenAnalyses, type TokenAnalysis, type InsertTokenAnalysis } from "@shared/schema";
+import { db } from "./db";
+import { eq } from "drizzle-orm";
 
 export interface IStorage {
   getAnalysis(contractAddress: string): Promise<TokenAnalysis | undefined>;
@@ -6,31 +8,26 @@ export interface IStorage {
   listAnalyses(): Promise<TokenAnalysis[]>;
 }
 
-export class MemStorage implements IStorage {
-  private analyses: Map<number, TokenAnalysis>;
-  private currentId: number;
-
-  constructor() {
-    this.analyses = new Map();
-    this.currentId = 1;
-  }
-
+export class DatabaseStorage implements IStorage {
   async getAnalysis(contractAddress: string): Promise<TokenAnalysis | undefined> {
-    return Array.from(this.analyses.values()).find(
-      (analysis) => analysis.contractAddress === contractAddress
-    );
+    const [analysis] = await db
+      .select()
+      .from(tokenAnalyses)
+      .where(eq(tokenAnalyses.contractAddress, contractAddress));
+    return analysis;
   }
 
   async createAnalysis(insertAnalysis: InsertTokenAnalysis): Promise<TokenAnalysis> {
-    const id = this.currentId++;
-    const analysis: TokenAnalysis = { ...insertAnalysis, id };
-    this.analyses.set(id, analysis);
+    const [analysis] = await db
+      .insert(tokenAnalyses)
+      .values(insertAnalysis)
+      .returning();
     return analysis;
   }
 
   async listAnalyses(): Promise<TokenAnalysis[]> {
-    return Array.from(this.analyses.values());
+    return db.select().from(tokenAnalyses);
   }
 }
 
-export const storage = new MemStorage();
+export const storage = new DatabaseStorage();
