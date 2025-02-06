@@ -12,7 +12,8 @@ import { AnalysisDialog } from "./AnalysisDialog";
 
 export function TokenAnalysisForm() {
   const [address, setAddress] = useState("");
-  const [currentAnalysis, setCurrentAnalysis] = useState<TokenAnalysisType | null>(null);
+  const [currentAnalysis, setCurrentAnalysis] =
+    useState<TokenAnalysisType | null>(null);
   const [dialogOpen, setDialogOpen] = useState(false);
 
   const { mutate, isPending } = useMutation({
@@ -27,22 +28,6 @@ export function TokenAnalysisForm() {
         contractAddress: address,
         tokenName: name,
         tokenSymbol: symbol,
-        analysis: {
-          holderCount: 0, 
-          liquidityScore: 0, 
-          contractVerified: false, 
-          topHolders: [], 
-          ownershipRatio: 0, 
-          deployer: {
-            address: ethers.ZeroAddress,
-            totalDeployments: 0,
-            netWorth: "0",
-            previousTokens: []
-          },
-          launchedOnFlaunch: false 
-        },
-        score: 0, 
-        createdAt: new Date().toISOString(),
       });
 
       return response.json();
