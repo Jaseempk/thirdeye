@@ -8,5 +8,5 @@ export const formatNumber = (num: number): string => {
 };
 
 export const formatPercentage = (num: number): string => {
-  return `${num.toFixed(2)}%`;
+  return `${num.toFixed(0)}%`;
 };

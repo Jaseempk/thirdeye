@@ -15,11 +15,13 @@ export const Analysis: React.FC<AnalysisProps> = ({
 
   const handleAnalyze = async (address: string) => {
     try {
-      const data = analyzeToken(address);
-      setTokenData(data);
-      console.log("daata:", data);
+      const result = await analyzeToken(address);
+      if (result) {
+        console.log("result:", result);
+        setTokenData(result);
+      }
     } catch (err) {
-      console.log("error", err);
+      console.log("error:", err);
       // Error is already handled by the hook
       setTokenData(null);
     }
@@ -38,6 +40,8 @@ export const Analysis: React.FC<AnalysisProps> = ({
         address={initialAddress}
         tokenData={tokenData || undefined}
         onAnalyze={handleAnalyze}
+        isLoading={isLoading}
+        error={error}
       />
     </div>
   );
