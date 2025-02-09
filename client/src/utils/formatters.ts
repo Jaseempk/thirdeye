@@ -4,9 +4,14 @@ export const formatAddress = (address: string): string => {
 };
 
 export const formatNumber = (num: number): string => {
-  return new Intl.NumberFormat().format(num);
+  const scaledNum = num / Math.pow(10, 18);
+  return new Intl.NumberFormat().format(scaledNum);
 };
 
 export const formatPercentage = (num: number): string => {
   return `${num.toFixed(0)}%`;
+};
+
+export const formatHolderPercentage = (num: number): string => {
+  return `${num.toFixed(2)}%`;
 };

@@ -3,13 +3,13 @@ import {
   Rocket,
   Shield,
   Search,
-  Zap,
+  // Zap,
   ExternalLink,
-  Twitter,
-  Flame,
-  TrendingUp,
+  // Twitter,
+  // Flame,
+  // TrendingUp,
+  // DollarSign,
   Sparkles,
-  DollarSign,
   Siren,
   Bot,
   Crown,
@@ -35,18 +35,6 @@ const tokenOfTheDay = {
   holders: 2800,
   liquidityLocked: true,
 };
-
-const trendingTokens = [
-  { name: "PEPE 2.0", gain: "+420%", timeframe: "24h" },
-  { name: "WOJAK", gain: "+169%", timeframe: "24h" },
-  { name: "CHAD", gain: "+223%", timeframe: "24h" },
-];
-
-const rugAlerts = [
-  { name: "SCAM", time: "2m ago", loss: "-99%" },
-  { name: "RUG", time: "5m ago", loss: "-95%" },
-  { name: "FAKE", time: "15m ago", loss: "-97%" },
-];
 
 export const Home: React.FC<HomeProps> = ({ onAnalyze }) => {
   const [tokenAddress, setTokenAddress] = React.useState("");
@@ -211,7 +199,7 @@ export const Home: React.FC<HomeProps> = ({ onAnalyze }) => {
       {/* Features */}
       <section id="features" className="container mx-auto px-4 mb-20">
         <div className="text-center mb-10">
-          <h2 className="font-carbonic text-4xl mb-4">Why Choose Rug Radar</h2>
+          <h2 className="font-carbonic text-4xl mb-4">Why Choose thirdeye</h2>
           <p className="font-suisse text-gray-400">
             Stay ahead of the game with our advanced features
           </p>
