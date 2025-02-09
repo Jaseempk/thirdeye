@@ -34,7 +34,7 @@ export const useTokenAnalytics = () => {
         });
 
         const data = await response.json();
-        console.log("daataa:", data);
+
         return data;
       } catch (err) {
         const message =

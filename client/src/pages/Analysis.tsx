@@ -17,7 +17,6 @@ export const Analysis: React.FC<AnalysisProps> = ({
     try {
       const result = await analyzeToken(address);
       if (result) {
-        console.log("result:", result);
         setTokenData(result);
       }
     } catch (err) {

@@ -4,20 +4,21 @@ import {
   ExternalLink,
   Search,
   AlertTriangle,
-  Clock,
+  // Clock,
   Users,
-  DollarSign,
+  // DollarSign,
   Copy,
   Loader2,
   Info,
   TrendingUp,
 } from "lucide-react";
-import { PieChart } from "react-minimal-pie-chart";
+// import { PieChart } from "react-minimal-pie-chart";
 import { TokenAnalyticsData } from "../types";
 import {
   formatAddress,
   formatNumber,
   formatPercentage,
+  formatHolderPercentage,
 } from "../utils/formatters";
 
 interface TokenAnalyticsProps {
@@ -36,11 +37,12 @@ export const TokenAnalytics: React.FC<TokenAnalyticsProps> = ({
   error,
 }) => {
   const [searchAddress, setSearchAddress] = React.useState(address);
-  const [hoveredSegment, setHoveredSegment] = React.useState<number | null>(
-    null
-  );
+  // const [hoveredSegment, setHoveredSegment] = React.useState<number | null>(
+  //   null
+  // );
+  const somNumber = 70;
 
-  console.log("tokenData:", tokenData);
+  console.log("tokendata:", tokenData);
 
   if (!tokenData) {
     return (
@@ -102,7 +104,7 @@ export const TokenAnalytics: React.FC<TokenAnalyticsProps> = ({
               </span>
               <button
                 onClick={() =>
-                  navigator.clipboard.writeText(tokenData.tokenInfo.contract)
+                  navigator.clipboard.writeText(tokenData?.contractAddress)
                 }
                 className="text-gray-400 hover:text-white transition-colors"
               >
@@ -169,6 +171,24 @@ export const TokenAnalytics: React.FC<TokenAnalyticsProps> = ({
               <span className="text-gray-400">Holders:</span>
               <span>{tokenData.analysis?.holderCount}</span>
             </div>
+            <div className="flex justify-between items-center">
+              <span className="text-gray-400">MarketCap:</span>
+              <span>
+                {formatNumber(
+                  Number(tokenData.analysis?.deployer?.tokenInfo?.marketCap)
+                )}{" "}
+                ETH
+              </span>
+            </div>
+            <div className="flex justify-between items-center">
+              <span className="text-gray-400">Volum24h:</span>
+              <span>
+                {formatNumber(
+                  Number(tokenData.analysis?.deployer?.tokenInfo?.volume24h)
+                )}
+              </span>
+            </div>
+
             <div className="flex justify-between items-center">
               <span className="text-gray-400">Liquidity Score:</span>
               <div className="flex items-center gap-2">
@@ -268,7 +288,7 @@ export const TokenAnalytics: React.FC<TokenAnalyticsProps> = ({
               <span
                 className={
                   // tokenData.deployerInfo.successRate >= 70
-                  60 >= 70 ? "text-green-400" : "text-warning"
+                  somNumber ? "text-green-400" : "text-warning"
                 }
               >
                 {60}%
@@ -353,92 +373,231 @@ export const TokenAnalytics: React.FC<TokenAnalyticsProps> = ({
             <h4 className="font-carbonic text-lg mb-4">Holder Changes</h4>
             <div className="space-y-3">
               <div className="flex justify-between items-center">
-                <span className="text-gray-400">Last 24h:</span>
+                <span className="text-gray-400">Last 5min:</span>
                 <div className="flex items-center gap-2">
                   <span
                     className={
-                      tokenData?.analysis?.holderStatistics?.holderChange
-                        ?.last24h?.changePercent >= 0
+                      tokenData?.analysis?.holderStatistics?.holderChange?.[
+                        "5min"
+                      ]?.changePercent >= 0
                         ? "text-green-400"
                         : "text-red-400"
                     }
                   >
-                    {/* {tokenData.holderChanges.last24h.count > 0 ? "+" : ""}
-                    {tokenData.holderChanges.last24h.count} */}
-                  </span>
-                  <span className="text-gray-400">
-                    (
-                    {tokenData?.analysis?.holderStatistics?.holderChange
-                      ?.last24h?.changePercent > 0
+                    {tokenData?.analysis?.holderStatistics?.holderChange?.[
+                      "5min"
+                    ].change > 0
                       ? "+"
                       : ""}
                     {
-                      tokenData?.analysis?.holderStatistics?.holderChange
-                        ?.last24h?.changePercent
+                      tokenData?.analysis?.holderStatistics?.holderChange?.[
+                        "5min"
+                      ].change
+                    }
+                  </span>
+                  <span className="text-gray-400">
+                    (
+                    {tokenData?.analysis?.holderStatistics?.holderChange?.[
+                      "5min"
+                    ]?.changePercent > 0
+                      ? "+"
+                      : ""}
+                    {
+                      tokenData?.analysis?.holderStatistics?.holderChange?.[
+                        "5min"
+                      ]?.changePercent
                     }
                     %)
                   </span>
                   <TrendingUp
                     className={`w-4 h-4 ${
-                      tokenData?.analysis?.holderStatistics?.holderChange
-                        ?.last24h?.changePercent >= 0
+                      tokenData?.analysis?.holderStatistics?.holderChange?.[
+                        "5min"
+                      ]?.changePercent >= 0
                         ? "text-green-400"
                         : "text-red-400"
                     }`}
                   />
                 </div>
               </div>
+
               <div className="flex justify-between items-center">
-                <span className="text-gray-400">Last 7d:</span>
+                <span className="text-gray-400">Last 1h:</span>
                 <div className="flex items-center gap-2">
                   <span
                     className={
-                      tokenData?.analysis?.holderStatistics?.holderChange
-                        ?.last7d?.changePercent >= 0
+                      tokenData?.analysis?.holderStatistics?.holderChange?.[
+                        "1h"
+                      ]?.changePercent >= 0
                         ? "text-green-400"
                         : "text-red-400"
                     }
                   >
-                    {/* {tokenData.holderChanges.last7d.count > 0 ? "+" : ""}
-                    {tokenData.holderChanges.last7d.count} */}
+                    {tokenData?.analysis?.holderStatistics?.holderChange?.["1h"]
+                      .change > 0
+                      ? "+"
+                      : ""}
+                    {
+                      tokenData?.analysis?.holderStatistics?.holderChange?.[
+                        "1h"
+                      ].change
+                    }
                   </span>
                   <span className="text-gray-400">
                     (
-                    {tokenData?.analysis?.holderStatistics?.holderChange?.last7d
+                    {tokenData?.analysis?.holderStatistics?.holderChange?.["1h"]
                       ?.changePercent > 0
                       ? "+"
                       : ""}
                     {
-                      tokenData?.analysis?.holderStatistics?.holderChange
-                        ?.last7d?.changePercent
+                      tokenData?.analysis?.holderStatistics?.holderChange?.[
+                        "1h"
+                      ]?.changePercent
                     }
                     %)
                   </span>
+                  <TrendingUp
+                    className={`w-4 h-4 ${
+                      tokenData?.analysis?.holderStatistics?.holderChange?.[
+                        "1h"
+                      ]?.changePercent >= 0
+                        ? "text-green-400"
+                        : "text-red-400"
+                    }`}
+                  />
                 </div>
               </div>
+
+              <div className="flex justify-between items-center">
+                <span className="text-gray-400">Last 6h:</span>
+                <div className="flex items-center gap-2">
+                  <span
+                    className={
+                      tokenData?.analysis?.holderStatistics?.holderChange?.[
+                        "6h"
+                      ]?.changePercent >= 0
+                        ? "text-green-400"
+                        : "text-red-400"
+                    }
+                  >
+                    {tokenData?.analysis?.holderStatistics?.holderChange?.["1h"]
+                      .change > 0
+                      ? "+"
+                      : ""}
+                    {
+                      tokenData?.analysis?.holderStatistics?.holderChange?.[
+                        "6h"
+                      ].change
+                    }
+                  </span>
+                  <span className="text-gray-400">
+                    (
+                    {tokenData?.analysis?.holderStatistics?.holderChange?.["6h"]
+                      ?.changePercent > 0
+                      ? "+"
+                      : ""}
+                    {
+                      tokenData?.analysis?.holderStatistics?.holderChange?.[
+                        "6h"
+                      ]?.changePercent
+                    }
+                    %)
+                  </span>
+                  <TrendingUp
+                    className={`w-4 h-4 ${
+                      tokenData?.analysis?.holderStatistics?.holderChange?.[
+                        "6h"
+                      ]?.changePercent >= 0
+                        ? "text-green-400"
+                        : "text-red-400"
+                    }`}
+                  />
+                </div>
+              </div>
+
+              <div className="flex justify-between items-center">
+                <span className="text-gray-400">Last 24h:</span>
+                <div className="flex items-center gap-2">
+                  <span
+                    className={
+                      tokenData?.analysis?.holderStatistics?.holderChange?.[
+                        "24h"
+                      ]?.changePercent >= 0
+                        ? "text-green-400"
+                        : "text-red-400"
+                    }
+                  >
+                    {tokenData?.analysis?.holderStatistics?.holderChange?.[
+                      "24h"
+                    ].change > 0
+                      ? "+"
+                      : ""}
+                    {
+                      tokenData?.analysis?.holderStatistics?.holderChange?.[
+                        "24h"
+                      ].change
+                    }
+                  </span>
+                  <span className="text-gray-400">
+                    (
+                    {tokenData?.analysis?.holderStatistics?.holderChange?.[
+                      "24h"
+                    ]?.changePercent > 0
+                      ? "+"
+                      : ""}
+                    {
+                      tokenData?.analysis?.holderStatistics?.holderChange?.[
+                        "24h"
+                      ]?.changePercent
+                    }
+                    %)
+                  </span>
+                  <TrendingUp
+                    className={`w-4 h-4 ${
+                      tokenData?.analysis?.holderStatistics?.holderChange?.[
+                        "24h"
+                      ]?.changePercent >= 0
+                        ? "text-green-400"
+                        : "text-red-400"
+                    }`}
+                  />
+                </div>
+              </div>
+
               <div className="flex justify-between items-center">
                 <span className="text-gray-400">Last 30d:</span>
                 <div className="flex items-center gap-2">
                   <span
                     className={
-                      tokenData?.analysis?.holderStatistics?.holderChange
-                        ?.last30d?.changePercent >= 0
+                      tokenData?.analysis?.holderStatistics?.holderChange?.[
+                        "30d"
+                      ]?.changePercent >= 0
                         ? "text-green-400"
                         : "text-red-400"
                     }
                   >
-                    {/* {tokenData.holderChanges.last30d.count > 0 ? "+" : ""}
-                    {tokenData.holderChanges.last30d.count} */}
-                  </span>
-                  <span className="text-gray-400">
-                    (
-                    {tokenData?.analysis?.holderStatistics?.holderChange
-                      ?.last30d?.changePercent > 0
+                    {tokenData?.analysis?.holderStatistics?.holderChange?.[
+                      "30d"
+                    ].change > 0
                       ? "+"
                       : ""}
                     {
-                      tokenData?.analysis?.holderStatistics?.holderChange
-                        ?.last30d?.changePercent
+                      tokenData?.analysis?.holderStatistics?.holderChange?.[
+                        "30d"
+                      ].change
+                    }
+                  </span>
+                  <span className="text-gray-400">
+                    (
+                    {tokenData?.analysis?.holderStatistics?.holderChange?.[
+                      "30d"
+                    ]?.changePercent > 0
+                      ? "+"
+                      : ""}
+                    {
+                      tokenData?.analysis?.holderStatistics?.holderChange?.[
+                        "30d"
+                      ]?.changePercent
                     }
                     %)
                   </span>
@@ -450,7 +609,7 @@ export const TokenAnalytics: React.FC<TokenAnalyticsProps> = ({
           {/* Distribution Chart */}
           <div className="bg-black/20 rounded-xl p-6 backdrop-blur-sm border border-primary/20">
             <h3 className="font-carbonic text-xl mb-4">Holder Distribution</h3>
-            <div className="relative">
+            {/* <div className="relative">
               <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
                 <div className="text-center">
                   <div className="font-carbonic text-2xl">
@@ -478,9 +637,9 @@ export const TokenAnalytics: React.FC<TokenAnalyticsProps> = ({
                 segmentsShift={(index) => (hoveredSegment === index ? 3 : 0)}
                 style={{ height: "300px" }}
               />
-            </div>
+            </div> */}
             <div className="grid grid-cols-2 gap-4 mt-6">
-              {tokenData?.analysis?.topHolders?.map((item, index) => (
+              {/* {tokenData?.analysis?.topHolders?.map((item, index) => (
                 <div
                   key={index}
                   className="flex items-center gap-2"
@@ -495,7 +654,7 @@ export const TokenAnalytics: React.FC<TokenAnalyticsProps> = ({
                     {item.title}: {formatPercentage(item.percentage)}
                   </span>
                 </div>
-              ))}
+              ))} */}
             </div>
           </div>
         </div>
@@ -535,10 +694,10 @@ export const TokenAnalytics: React.FC<TokenAnalyticsProps> = ({
                     </div>
                   </td>
                   <td className="py-4 text-right font-carbonic">
-                    {formatPercentage(holder.percentage)}
+                    {formatHolderPercentage(holder.percentage)}
                   </td>
                   <td className="py-4 text-right font-carbonic">
-                    {holder.balance}
+                    {formatNumber(Number(holder.balance))}
                   </td>
                 </tr>
               ))}
@@ -559,7 +718,7 @@ export const TokenAnalytics: React.FC<TokenAnalyticsProps> = ({
           View on Twitter
         </a>
         <a
-          href="https://flaunch.com"
+          href={`https://flaunch.gg/base/coin/${tokenData?.contractAddress}`}
           target="_blank"
           rel="noopener noreferrer"
           className="flex-1 bg-gradient-to-r from-primary to-accent hover:opacity-90 transition-opacity px-6 py-3 rounded-lg font-suisse flex items-center justify-center gap-2"
