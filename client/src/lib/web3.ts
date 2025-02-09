@@ -1,34 +1,24 @@
-import { ethers } from "ethers";
+import { readContract } from "@wagmi/core";
+import { config } from "../providers/Web3Provider";
+import { abi } from "../../tokenAbi/flaunchiabi";
 
-export async function connectWallet() {
-  if (!window.ethereum) {
-    throw new Error("MetaMask not installed");
-  }
-
-  await window.ethereum.request({ method: "eth_requestAccounts" });
-
-  const provider = new ethers.BrowserProvider(window.ethereum);
-  const network = await provider.getNetwork();
-
-  // Base network chainId is 8453
-  if (Number(network.chainId) !== 8453) {
-    throw new Error("Please connect to Base network");
-  }
-
-  return provider;
-}
-
-export async function getTokenInfo(address: string, provider: ethers.Provider) {
-  const abi = ["function name() view returns (string)", "function symbol() view returns (string)"];
-  const contract = new ethers.Contract(address, abi, provider);
-
+export async function getTokenInfo(address: string) {
   try {
-    const [name, symbol] = await Promise.all([
-      contract.name(),
-      contract.symbol()
-    ]);
-    return { name, symbol };
+    const tokenName = await readContract(config, {
+      abi,
+      address: address as `0x${string}`,
+      functionName: "name",
+    });
+    console.log("tokenName:", tokenName);
+    const tokenSymbol = await readContract(config, {
+      abi,
+      address: address as `0x${string}`,
+      functionName: "symbol",
+    });
+
+    return { tokenName, tokenSymbol };
   } catch (error) {
+    console.log("error:", error);
     throw new Error("Invalid token contract");
   }
 }

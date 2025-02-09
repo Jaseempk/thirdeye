@@ -1,0 +1,48 @@
+@import 'tailwindcss/base';
+@import 'tailwindcss/components';
+@import 'tailwindcss/utilities';
+@import './animations.css';
+@import './fonts.css';
+
+@layer base {
+  html {
+    @apply antialiased;
+  }
+
+  body {
+    @apply bg-[#0a0a0a] text-white min-h-screen;
+  }
+}
+
+@layer components {
+  .glass-card {
+    @apply bg-black/20 rounded-xl backdrop-blur-sm border border-primary/20;
+  }
+
+  .glass-button {
+    @apply bg-black/40 hover:bg-black/60 transition-colors px-4 py-2 rounded-lg font-carbonic;
+  }
+
+  .gradient-button {
+    @apply bg-gradient-to-r from-[#E7692C] to-[#EB88EF] hover:opacity-90 transition-opacity;
+  }
+}
+
+/* Mobile-first responsive classes */
+@layer utilities {
+  .responsive-container {
+    @apply px-4 md:px-6 lg:px-8;
+  }
+
+  .responsive-grid {
+    @apply grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6;
+  }
+
+  .responsive-text {
+    @apply text-sm md:text-base;
+  }
+
+  .responsive-heading {
+    @apply text-2xl md:text-3xl lg:text-4xl;
+  }
+}

@@ -30,10 +30,10 @@ export const holderStatisticsSchema = z.object({
     "5min": holderChangeSchema,
     "1h": holderChangeSchema,
     "6h": holderChangeSchema,
-    "24h": holderChangeSchema,
+    last24h: holderChangeSchema,
     "3d": holderChangeSchema,
-    "7d": holderChangeSchema,
-    "30d": holderChangeSchema,
+    last7d: holderChangeSchema,
+    last30d: holderChangeSchema,
   }),
   holderSupply: z.object({
     top10: holderSupplySchema,
