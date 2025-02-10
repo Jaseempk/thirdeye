@@ -5,7 +5,7 @@ import {
   Search,
   // Zap,
   ExternalLink,
-  // Twitter,
+  Twitter,
   // Flame,
   // TrendingUp,
   // DollarSign,
@@ -14,6 +14,7 @@ import {
   Bot,
   Crown,
   AlertTriangle,
+  // MessageCircle,
 } from "lucide-react";
 import { TokenCard } from "../components/TokenCard";
 import { ConnectButton } from "../components/ConnectButton";
@@ -276,6 +277,42 @@ export const Home: React.FC<HomeProps> = ({ onAnalyze }) => {
           </div>
         </div>
       </section>
+      <footer className="container mx-auto px-4 py-8 mt-20 border-t border-primary/20">
+        <div className="flex flex-col items-center justify-center gap-4">
+          <img src="images/flaunch.png" alt="Flaunch Logo" className="w-20" />
+          <p className="text-center font-suisse text-sm text-gray-400">
+            powered by{" "}
+            <a
+              href="https://flaunch.gg"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-primary hover:text-primary/80 transition-colors"
+            >
+              flaunch
+            </a>
+          </p>
+
+          {/* Social Media Icons */}
+          <div className="flex items-center gap-6">
+            <a
+              href="https://twitter.com/third9y9"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-gray-400 hover:text-primary transition-colors"
+            >
+              <Twitter className="w-6 h-6" />
+            </a>
+            <a
+              href="https://t.me/thirdeye"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-gray-400 hover:text-primary transition-colors"
+            >
+              <img src="images/tg.png" alt="tg-logo" className="w-6 h-6"></img>
+            </a>
+          </div>
+        </div>
+      </footer>
     </div>
   );
 };
