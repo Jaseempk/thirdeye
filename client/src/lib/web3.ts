@@ -1,6 +1,6 @@
 import { readContract } from "@wagmi/core";
 import { config } from "../providers/Web3Provider";
-import { abi } from "../../tokenAbi/flaunchiabi";
+import { abi } from "../tokenAbi/flaunchiabi";
 
 export async function getTokenInfo(address: string) {
   try {

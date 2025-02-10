@@ -42,8 +42,6 @@ export const TokenAnalytics: React.FC<TokenAnalyticsProps> = ({
   // );
   const somNumber = 70;
 
-  console.log("tokendata:", tokenData);
-
   if (!tokenData) {
     return (
       <div className="p-6">
