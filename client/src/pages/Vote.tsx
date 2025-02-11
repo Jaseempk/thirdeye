@@ -2,8 +2,8 @@ import React from "react";
 import { Trophy, Wallet, Lock, Crown, Sparkles, ChevronUp } from "lucide-react";
 
 const demoToken = {
-  name: "Rug Radar",
-  symbol: "RADAR",
+  name: "thirdeye",
+  symbol: "TEYE",
   address: "0xRAD...AR99",
   imageUrl: "https://images.unsplash.com/photo-1639762681485-074b7f938ba0",
   votes: 4269,
@@ -74,7 +74,7 @@ export const Vote: React.FC = () => {
                 Token Staking
               </h3>
               <p className="font-suisse text-sm sm:text-base text-gray-400">
-                Stake RADAR tokens to unlock voting power multipliers
+                Stake TEYE tokens to unlock voting power multipliers
               </p>
             </div>
             <div className="bg-black/30 rounded-xl p-4 sm:p-6 border border-[#EB88EF]/20 hover:border-[#EB88EF]/40 transition-colors sm:col-span-2 lg:col-span-1">
@@ -83,7 +83,7 @@ export const Vote: React.FC = () => {
                 Verified Voting
               </h3>
               <p className="font-suisse text-sm sm:text-base text-gray-400">
-                Connect wallet & hold RADAR to participate
+                Connect wallet & hold TEYE to participate
               </p>
             </div>
           </div>

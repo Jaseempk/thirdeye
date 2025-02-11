@@ -25,12 +25,12 @@ interface HomeProps {
 }
 
 const tokenOfTheDay = {
-  name: "Project X",
+  name: "$TEYE",
   address: "2PHi2f7xPq6bnh2J6xRN2Qc5TJ37epHihvBk49DgpAaU",
   imageUrl:
     "https://images.unsplash.com/photo-1639762681485-074b7f938ba0?auto=format&fit=crop&q=80&w=2832",
   votes: 1337,
-  launchpadUrl: "https://flaunch.com",
+  launchpadUrl: "https://flaunch.gg",
   riskScore: 59.48,
   marketCap: "$1.2M",
   holders: 2800,
@@ -92,7 +92,7 @@ export const Home: React.FC<HomeProps> = ({ onAnalyze }) => {
           </h1>
           <p className="font-suisse text-lg sm:text-xl text-gray-400 max-w-3xl mx-auto mb-8">
             Advanced token analytics platform powered by AI to help you make
-            informed decisions in the wild west of crypto
+            non-retarded decisions in the trenches
           </p>
           <div className="flex flex-col sm:flex-row justify-center gap-4 max-w-2xl mx-auto">
             {!isConnected ? (
@@ -103,21 +103,33 @@ export const Home: React.FC<HomeProps> = ({ onAnalyze }) => {
                 </p>
               </div>
             ) : (
-              <div className="flex-1 relative">
-                <input
-                  type="text"
-                  value={tokenAddress}
-                  onChange={(e) => setTokenAddress(e.target.value)}
-                  placeholder="Enter token address..."
-                  className="w-full bg-black/40 border border-primary/20 rounded-lg px-4 py-4 text-white font-suisse pr-36"
-                />
-                <button
-                  onClick={() => onAnalyze(tokenAddress)}
-                  className="absolute right-2 top-2 bg-gradient-to-r from-[#E7692C] to-[#EB88EF] px-6 py-2 rounded-lg font-carbonic text-xl hover:opacity-90 transition-opacity flex items-center gap-2"
-                >
-                  <Search className="w-5 h-5" />
-                  Analyze
-                </button>
+              <div className="flex flex-col gap-4 w-full">
+                <div className="flex-1 relative">
+                  <input
+                    type="text"
+                    value={tokenAddress}
+                    onChange={(e) => setTokenAddress(e.target.value)}
+                    placeholder="Enter token address..."
+                    className="w-full bg-black/40 border border-primary/20 rounded-lg px-4 py-3 md:py-4 text-white font-suisse pr-24 md:pr-36 text-sm md:text-base"
+                  />
+                  <button
+                    onClick={() => onAnalyze(tokenAddress)}
+                    className="absolute right-2 top-1/2 -translate-y-1/2 bg-gradient-to-r from-[#E7692C] to-[#EB88EF] px-4 md:px-6 py-1.5 md:py-2 rounded-lg font-nohemi text-base md:text-xl hover:opacity-90 transition-opacity flex items-center gap-2"
+                  >
+                    <Search className="w-4 h-4 md:w-5 md:h-5" />
+                    <span className="hidden sm:inline">Analyze</span>
+                  </button>
+                </div>
+                <p className="text-xs md:text-sm text-gray-400 font-suisse">
+                  Disclaimer: The model is in beta and actively being trained.
+                  This is not a financial advice, see more at{" "}
+                  <button
+                    onClick={() => (window.location.hash = "#/terms")}
+                    className="text-primary hover:text-primary/80 transition-colors underline"
+                  >
+                    Terms and Conditions
+                  </button>
+                </p>
               </div>
             )}
           </div>
@@ -186,7 +198,7 @@ export const Home: React.FC<HomeProps> = ({ onAnalyze }) => {
                 Most Based Token Today
               </span>
             </div>
-            <h2 className="font-carbonic text-4xl mb-4">Token of the Day</h2>
+            <h2 className="font-carbonic text-4xl mb-4">Ticker of the Day</h2>
             <p className="font-suisse text-gray-400">
               Most voted token by our based community
             </p>
@@ -298,17 +310,21 @@ export const Home: React.FC<HomeProps> = ({ onAnalyze }) => {
               href="https://twitter.com/third9y9"
               target="_blank"
               rel="noopener noreferrer"
-              className="text-gray-400 hover:text-primary transition-colors"
+              className="text-gray-300 hover:text-primary transition-colors"
             >
               <Twitter className="w-6 h-6" />
             </a>
             <a
-              href="https://t.me/thirdeye"
+              href="https://t.me/+YKM7szAwA2Q1OTk1"
               target="_blank"
               rel="noopener noreferrer"
               className="text-gray-400 hover:text-primary transition-colors"
             >
-              <img src="images/tg.png" alt="tg-logo" className="w-6 h-6"></img>
+              <img
+                src="images/tg.png"
+                alt="tg-logo"
+                className="w-6 h-6 text-gray-400 hover:text-primary transition-colors"
+              ></img>
             </a>
           </div>
         </div>

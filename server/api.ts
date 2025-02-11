@@ -84,7 +84,7 @@ async function generateAIAnalysis(analysisData: TokenAnalysisData) {
         {
           role: "system",
           content:
-            "You are a token analysis assistant. Analyze the provided token data and generate insights. Return your response as a JSON object with the following structure: { result: string, explanation: { summary: string, insights: string[] } }",
+            "Assume yourself as the persona of top 1% crypto token analysis expert. Analyze the provided token data and generate insights. Return your response as a JSON object with the following structure: { result: string, explanation: { summary: string, insights: string[] } }",
         },
         { role: "user", content: prompt },
       ],
