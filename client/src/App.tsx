@@ -43,12 +43,11 @@ function App() {
         <header className="flex items-center justify-between py-6 px-8 backdrop-blur-lg border-b border-primary/20">
           <h1
             onClick={() => setCurrentPage("home")}
-            className="font-carbonic text-4xl bg-gradient-to-r from-primary via-secondary to-accent text-transparent bg-clip-text animate-pulse cursor-pointer"
+            className="font-nohemi text-4xl bg-gradient-to-r from-primary via-secondary to-accent text-transparent bg-clip-text animate-pulse cursor-pointer"
           >
             thirdeye
           </h1>
           <div className="flex items-center gap-6">
-            <div className="relative"></div>
             <nav className="flex items-center gap-4">
               <button
                 onClick={() => setCurrentPage("home")}

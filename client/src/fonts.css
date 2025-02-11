@@ -1,13 +1,23 @@
 @font-face {
-  font-family: 'POI Carbonic';
-  src: url('https://db.onlinewebfonts.com/t/1dc8ecd8056a5ea7aa7de1db42b5b639.woff2') format('woff2');
+  font-family: "POI Carbonic";
+  src: url("https://db.onlinewebfonts.com/t/1dc8ecd8056a5ea7aa7de1db42b5b639.woff2")
+    format("woff2");
   font-weight: normal;
   font-style: normal;
 }
 
 @font-face {
-  font-family: 'Suisse Intl';
-  src: url('https://db.onlinewebfonts.com/t/51296ff10f49c47c4a203c0c30b11544.woff2') format('woff2');
+  font-family: "Suisse Intl";
+  src: url("https://db.onlinewebfonts.com/t/51296ff10f49c47c4a203c0c30b11544.woff2")
+    format("woff2");
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "Nohemi";
+  src: url("https://db.onlinewebfonts.com/t/0d2cbb35c1c6c3256b0a8e77337c9dd0.woff2")
+    format("woff2");
   font-weight: normal;
   font-style: normal;
 }
