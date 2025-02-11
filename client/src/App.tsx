@@ -2,18 +2,26 @@ import React from "react";
 import { Home } from "./pages/Home";
 import { Analysis } from "./pages/Analysis";
 import { Vote } from "./pages/Vote";
+import { Terms } from "./pages/Terms";
+import { Menu, X } from "lucide-react";
 
 function App() {
   const [currentPage, setCurrentPage] = React.useState<
-    "home" | "analysis" | "vote"
+    "home" | "analysis" | "vote" | "terms"
   >("home");
   const [searchAddress, setSearchAddress] = React.useState<string>("");
+  const [mobileMenuOpen, setMobileMenuOpen] = React.useState(false);
 
   const handleAnalyze = (address: string) => {
     if (address.trim()) {
       setSearchAddress(address);
       setCurrentPage("analysis");
     }
+  };
+
+  const handlePageChange = (page: typeof currentPage) => {
+    setCurrentPage(page);
+    setMobileMenuOpen(false);
   };
 
   return (
@@ -40,46 +48,114 @@ function App() {
 
       {/* Content */}
       <div className="relative z-10">
-        <header className="flex items-center justify-between py-6 px-8 backdrop-blur-lg border-b border-primary/20">
-          <h1
-            onClick={() => setCurrentPage("home")}
-            className="font-nohemi text-4xl bg-gradient-to-r from-primary via-secondary to-accent text-transparent bg-clip-text animate-pulse cursor-pointer"
-          >
-            thirdeye
-          </h1>
-          <div className="flex items-center gap-6">
-            <nav className="flex items-center gap-4">
-              <button
+        <header className="sticky top-0 z-50 backdrop-blur-lg border-b border-primary/20">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="flex items-center justify-between h-16 md:h-20">
+              {/* Logo */}
+              <h1
                 onClick={() => setCurrentPage("home")}
-                className={`px-6 py-2 rounded-lg font-carbonic transition-colors ${
-                  currentPage === "home"
-                    ? "bg-gradient-to-r from-[#E7692C] to-[#EB88EF]"
-                    : "bg-black/40 hover:bg-black/60"
-                }`}
+                className="text-4xl font-serif bg-gradient-to-r white bg-clip-text animate-pulse cursor-pointer hover:from-yellow-400 hover:to-amber-200 transition-all duration-300"
+                style={{ textShadow: "2px 2px 4px rgba(0, 0, 0, 0.3)" }}
               >
-                Home
-              </button>
+                thirdeye
+              </h1>
+
+              {/* Desktop Navigation */}
+              <nav className="hidden md:flex items-center gap-4">
+                <button
+                  onClick={() => handlePageChange("home")}
+                  className={`px-4 py-2 rounded-lg font-nohemi text-sm transition-colors ${
+                    currentPage === "home"
+                      ? "bg-gradient-to-r from-[#E7692C] to-[#EB88EF]"
+                      : "bg-black/40 hover:bg-black/60"
+                  }`}
+                >
+                  Home
+                </button>
+                <button
+                  onClick={() => handlePageChange("vote")}
+                  className={`px-4 py-2 rounded-lg font-nohemi text-sm transition-colors ${
+                    currentPage === "vote"
+                      ? "bg-gradient-to-r from-[#E7692C] to-[#EB88EF]"
+                      : "bg-black/40 hover:bg-black/60"
+                  }`}
+                >
+                  Vote
+                </button>
+                <button
+                  onClick={() => handlePageChange("terms")}
+                  className={`px-4 py-2 rounded-lg font-nohemi text-sm transition-colors ${
+                    currentPage === "terms"
+                      ? "bg-gradient-to-r from-[#E7692C] to-[#EB88EF]"
+                      : "bg-black/40 hover:bg-black/60"
+                  }`}
+                >
+                  Terms
+                </button>
+              </nav>
+
+              {/* Mobile menu button */}
               <button
-                onClick={() => setCurrentPage("vote")}
-                className={`px-6 py-2 rounded-lg font-carbonic transition-colors ${
-                  currentPage === "vote"
-                    ? "bg-gradient-to-r from-[#E7692C] to-[#EB88EF]"
-                    : "bg-black/40 hover:bg-black/60"
-                }`}
+                onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+                className="md:hidden p-2 rounded-lg bg-black/40 hover:bg-black/60 transition-colors"
               >
-                Vote
+                {mobileMenuOpen ? (
+                  <X className="w-6 h-6" />
+                ) : (
+                  <Menu className="w-6 h-6" />
+                )}
               </button>
-            </nav>
+            </div>
           </div>
+
+          {/* Mobile Navigation */}
+          {mobileMenuOpen && (
+            <div className="md:hidden border-t border-primary/20 bg-black/95 backdrop-blur-lg">
+              <div className="px-4 py-3 space-y-2">
+                <button
+                  onClick={() => handlePageChange("home")}
+                  className={`w-full px-4 py-2 rounded-lg font-nohemi text-sm transition-colors ${
+                    currentPage === "home"
+                      ? "bg-gradient-to-r from-[#E7692C] to-[#EB88EF]"
+                      : "bg-black/40 hover:bg-black/60"
+                  }`}
+                >
+                  Home
+                </button>
+                <button
+                  onClick={() => handlePageChange("vote")}
+                  className={`w-full px-4 py-2 rounded-lg font-nohemi text-sm transition-colors ${
+                    currentPage === "vote"
+                      ? "bg-gradient-to-r from-[#E7692C] to-[#EB88EF]"
+                      : "bg-black/40 hover:bg-black/60"
+                  }`}
+                >
+                  Vote
+                </button>
+                <button
+                  onClick={() => handlePageChange("terms")}
+                  className={`w-full px-4 py-2 rounded-lg font-nohemi text-sm transition-colors ${
+                    currentPage === "terms"
+                      ? "bg-gradient-to-r from-[#E7692C] to-[#EB88EF]"
+                      : "bg-black/40 hover:bg-black/60"
+                  }`}
+                >
+                  Terms
+                </button>
+              </div>
+            </div>
+          )}
         </header>
 
-        <main>
+        <main className="min-h-[calc(100vh-4rem)] md:min-h-[calc(100vh-5rem)]">
           {currentPage === "home" ? (
             <Home onAnalyze={handleAnalyze} />
           ) : currentPage === "analysis" ? (
             <Analysis address={searchAddress} />
-          ) : (
+          ) : currentPage === "vote" ? (
             <Vote />
+          ) : (
+            <Terms />
           )}
         </main>
       </div>
@@ -88,3 +164,13 @@ function App() {
 }
 
 export default App;
+
+/**
+ *           <h1
+            onClick={() => setCurrentPage("home")}
+            className="text-4xl font-serif bg-gradient-to-r white bg-clip-text animate-pulse cursor-pointer hover:from-yellow-400 hover:to-amber-200 transition-all duration-300"
+            style={{ textShadow: "2px 2px 4px rgba(0, 0, 0, 0.3)" }}
+          >
+            thirdeye
+          </h1>
+ */

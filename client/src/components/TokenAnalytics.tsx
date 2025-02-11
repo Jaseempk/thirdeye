@@ -12,7 +12,7 @@ import {
   Info,
   TrendingUp,
 } from "lucide-react";
-// import { PieChart } from "react-minimal-pie-chart";
+import { PieChart } from "react-minimal-pie-chart";
 import { TokenAnalyticsData } from "../types";
 import {
   formatAddress,
@@ -28,6 +28,14 @@ interface TokenAnalyticsProps {
   isLoading: boolean;
   error: string | null;
 }
+// Add type definitions for the pie chart data
+interface HolderDistributionItem {
+  title: string;
+  value: number;
+  color: string;
+  isContract: boolean;
+  isSingleHolder?: boolean;
+}
 
 export const TokenAnalytics: React.FC<TokenAnalyticsProps> = ({
   address,
@@ -37,10 +45,104 @@ export const TokenAnalytics: React.FC<TokenAnalyticsProps> = ({
   error,
 }) => {
   const [searchAddress, setSearchAddress] = React.useState(address);
-  // const [hoveredSegment, setHoveredSegment] = React.useState<number | null>(
-  //   null
-  // );
+  const [hoveredSegment, setHoveredSegment] = React.useState<number | null>(
+    null
+  );
   const somNumber = 70;
+
+  // Process top holders data for pie chart
+  const processHoldersData = (): HolderDistributionItem[] => {
+    if (!tokenData?.analysis?.topHolders) return [];
+
+    const holders = tokenData.analysis.topHolders;
+
+    // If no holders, return empty array
+    if (holders.length === 0) {
+      return [
+        {
+          title: "No holders data",
+          value: 100,
+          color: "#4B5563",
+          isContract: false,
+        },
+      ];
+    }
+
+    // If single holder owns everything
+    if (holders.length === 1 && holders[0].percentage >= 99) {
+      return [
+        {
+          title: formatAddress(holders[0].address),
+          value: holders[0].percentage,
+          color: "#EB88EF",
+          isContract: holders[0].isContract,
+          isSingleHolder: true,
+        },
+      ];
+    }
+
+    // Take top 20 holders or all holders if less than 20
+    const topHolders = holders.slice(0, Math.min(20, holders.length));
+
+    // Calculate total percentage for "Others"
+    const topHoldersTotal = topHolders.reduce(
+      (sum, holder) => sum + holder.percentage,
+      0
+    );
+    const othersPercentage = Math.max(0, 100 - topHoldersTotal);
+
+    // Create pie chart data with colors
+    const colors = [
+      "#EB88EF",
+      "#E7692C",
+      "#4BA5F2",
+      "#EFBC41",
+      "#6366F1",
+      "#EC4899",
+      "#8B5CF6",
+      "#10B981",
+      "#F59E0B",
+      "#EF4444",
+      "#8B5CF6",
+      "#14B8A6",
+      "#F97316",
+      "#6366F1",
+      "#8B5CF6",
+      "#EC4899",
+      "#10B981",
+      "#F59E0B",
+      "#EF4444",
+      "#E7692C",
+    ];
+
+    const pieData = topHolders.map((holder, index) => ({
+      title: formatAddress(holder.address),
+      value: holder.percentage,
+      color: colors[index % colors.length],
+      isContract: holder.isContract,
+    }));
+
+    // Add "Others" segment if there are more holders
+    if (othersPercentage > 0.1) {
+      // Only add if more than 0.1%
+      pieData.push({
+        title: "Others",
+        value: othersPercentage,
+        color: "#4B5563",
+        isContract: false,
+      });
+    }
+
+    return pieData;
+  };
+
+  const distributionData = processHoldersData();
+
+  // Add function to handle address copy
+  const handleAddressCopy = (address: string) => {
+    navigator.clipboard.writeText(address);
+    // You could optionally add a toast notification here
+  };
 
   if (!tokenData) {
     return (
@@ -603,57 +705,115 @@ export const TokenAnalytics: React.FC<TokenAnalyticsProps> = ({
               </div>
             </div>
           </div>
+        </div>
+      </div>
 
-          {/* Distribution Chart */}
-          <div className="bg-black/20 rounded-xl p-6 backdrop-blur-sm border border-primary/20">
-            <h3 className="font-carbonic text-xl mb-4">Holder Distribution</h3>
-            {/* <div className="relative">
-              <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
-                <div className="text-center">
-                  <div className="font-carbonic text-2xl">
-                    {hoveredSegment !== null
-                      ? formatPercentage(
-                          tokenData.distributionData[hoveredSegment].value
-                        )
-                      : "100%"}
-                  </div>
-                  <div className="text-sm text-gray-400 font-suisse">
-                    {hoveredSegment !== null
-                      ? tokenData.distributionData[hoveredSegment].title
-                      : "Total"}
-                  </div>
+      {/* Holder Distribution Chart */}
+      <div className="bg-black/20 rounded-xl p-6 backdrop-blur-sm border border-primary/20">
+        <h3 className="font-carbonic text-xl mb-6 flex items-center gap-2 text-cyan-300">
+          <Users className="w-5 h-5" />
+          Holder Distribution
+        </h3>
+
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+          {/* Pie Chart */}
+          <div className="relative">
+            <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
+              <div className="text-center">
+                <div className="font-carbonic text-2xl">
+                  {hoveredSegment !== null
+                    ? formatPercentage(distributionData[hoveredSegment].value)
+                    : "100%"}
+                </div>
+                <div className="text-sm text-gray-400 font-suisse">
+                  {hoveredSegment !== null
+                    ? distributionData[hoveredSegment].title
+                    : distributionData.length === 1 &&
+                      "isSingleHolder" in distributionData[0] &&
+                      distributionData[0].isSingleHolder
+                    ? "Single Holder"
+                    : "Total"}
                 </div>
               </div>
-              <PieChart
-                data={tokenData.distributionData}
-                lineWidth={20}
-                paddingAngle={2}
-                animate
-                onMouseOver={(_, index) => setHoveredSegment(index)}
-                onMouseOut={() => setHoveredSegment(null)}
-                segmentsStyle={{ transition: "stroke-width 0.2s" }}
-                segmentsShift={(index) => (hoveredSegment === index ? 3 : 0)}
-                style={{ height: "300px" }}
-              />
-            </div> */}
-            <div className="grid grid-cols-2 gap-4 mt-6">
-              {/* {tokenData?.analysis?.topHolders?.map((item, index) => (
-                <div
-                  key={index}
-                  className="flex items-center gap-2"
-                  onMouseEnter={() => setHoveredSegment(index)}
-                  onMouseLeave={() => setHoveredSegment(null)}
-                >
-                  <div
-                    className="w-3 h-3 rounded-full"
-                    style={{ backgroundColor: "#EB88EF" }}
-                  />
-                  <span className="font-suisse text-sm">
-                    {item.title}: {formatPercentage(item.percentage)}
-                  </span>
-                </div>
-              ))} */}
             </div>
+            <PieChart
+              data={distributionData}
+              lineWidth={30}
+              paddingAngle={0.5}
+              animate
+              animationDuration={500}
+              onMouseOver={(_, index) => setHoveredSegment(index)}
+              onMouseOut={() => setHoveredSegment(null)}
+              segmentsStyle={{
+                transition: "stroke-width 0.2s",
+                cursor: "pointer",
+              }}
+              segmentsShift={(index) => (hoveredSegment === index ? 2 : 0)}
+              style={{ height: "300px" }}
+              startAngle={-90}
+            />
+          </div>
+
+          {/* Legend */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 max-h-[300px] overflow-y-auto custom-scrollbar">
+            {distributionData.length === 1 &&
+            "isSingleHolder" in distributionData[0] &&
+            distributionData[0].isSingleHolder ? (
+              <div className="col-span-2 p-4 bg-red-500/20 rounded-lg border border-red-500/40">
+                <p className="text-red-400 font-suisse text-sm">
+                  Warning: Single holder owns{" "}
+                  {formatPercentage(distributionData[0].value)} of the total
+                  supply
+                </p>
+              </div>
+            ) : distributionData.length === 1 &&
+              distributionData[0].title === "No holders data" ? (
+              <div className="col-span-2 p-4 bg-yellow-500/20 rounded-lg border border-yellow-500/40">
+                <p className="text-yellow-400 font-suisse text-sm">
+                  No holder data available for this token
+                </p>
+              </div>
+            ) : (
+              distributionData.map((item, index) => {
+                // Find the original holder data to get the full address
+                const originalHolder = tokenData?.analysis?.topHolders?.[index];
+                const fullAddress = originalHolder?.address || "";
+
+                return (
+                  <div
+                    key={index}
+                    className="flex items-center gap-2 p-2 rounded-lg hover:bg-black/20 transition-colors group"
+                    onMouseEnter={() => setHoveredSegment(index)}
+                    onMouseLeave={() => setHoveredSegment(null)}
+                  >
+                    <div
+                      className="w-3 h-3 rounded-full flex-shrink-0"
+                      style={{ backgroundColor: item.color }}
+                    />
+                    <div className="min-w-0 flex-1">
+                      <div className="flex items-center gap-1">
+                        <button
+                          onClick={() => handleAddressCopy(fullAddress)}
+                          className="font-suisse text-sm truncate hover:text-primary transition-colors flex items-center gap-1"
+                          title="Click to copy address"
+                        >
+                          {item.title}
+                          <Copy className="w-3 h-3 opacity-0 group-hover:opacity-100 transition-opacity" />
+                        </button>
+                        {item.isContract && (
+                          <span className="text-xs text-primary bg-primary/20 px-1.5 py-0.5 rounded">
+                            Contract
+                          </span>
+                        )}
+                      </div>
+                      <span className="text-xs text-gray-400">
+                        {formatPercentage(item.value)}
+                      </span>
+                    </div>
+                  </div>
+                );
+              })
+            )}
           </div>
         </div>
       </div>
