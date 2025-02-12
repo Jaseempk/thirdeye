@@ -1,6 +1,7 @@
 import { Holder, Deployer, TokenAnalysisData } from "@shared/schema";
 import Moralis from "moralis";
 import OpenAI from "openai";
+import { zodResponseFormat } from "openai/helpers/zod";
 import { z } from "zod";
 
 if (!process.env.MORALIS_API_KEY) {
@@ -30,9 +31,17 @@ const openai = new OpenAI({
   organization: OPENAI_ORG_ID,
 });
 
+const TokenAnalysis = z.object({
+  result: z.object({
+    score: z.number(),
+    summary: z.string(),
+  }),
+  insights: z.array(z.string()),
+});
+
 async function generateAIAnalysis(analysisData: TokenAnalysisData) {
   try {
-    const prompt = `Analyze this token data and provide insights. Consider these factors:
+    const prompt = `Analyze this token data and provide EXACTLY 4 numbered insights. Score must be between 0 and 100:
     
     Token Info:
     - Holder Count: ${analysisData.holderCount}
@@ -42,81 +51,35 @@ async function generateAIAnalysis(analysisData: TokenAnalysisData) {
     - Launched on Flaunch: ${analysisData.launchedOnFlaunch}
     
     Holder Statistics:
-    - Top 10 Holders Own: ${
-      analysisData.holderStatistics.holderSupply.top10.supplyPercent
-    }%
-    - Top 50 Holders Own: ${
-      analysisData.holderStatistics.holderSupply.top50.supplyPercent
-    }%
-    - 24h Holder Change: ${
-      analysisData.holderStatistics.holderChange["24h"].change
-    } (${analysisData.holderStatistics.holderChange["24h"].changePercent}%)
-    - 7d Holder Change: ${
-      analysisData.holderStatistics.holderChange["7d"].change
-    } (${analysisData.holderStatistics.holderChange["7d"].changePercent}%)
+    - Top 10 Holders Own: ${analysisData.holderStatistics.holderSupply.top10.supplyPercent}%
+    - Top 50 Holders Own: ${analysisData.holderStatistics.holderSupply.top50.supplyPercent}%
+    - 24h Holder Change: ${analysisData.holderStatistics.holderChange["24h"].change} (${analysisData.holderStatistics.holderChange["24h"].changePercent}%)
+    - 7d Holder Change: ${analysisData.holderStatistics.holderChange["7d"].change} (${analysisData.holderStatistics.holderChange["7d"].changePercent}%)
     
     Acquisition Methods:
     - Swap: ${analysisData.holderStatistics.holdersByAcquisition.swap}
     - Transfer: ${analysisData.holderStatistics.holdersByAcquisition.transfer}
-    - Airdrop: ${analysisData.holderStatistics.holdersByAcquisition.airdrop}
-    
-    Deployer Stats:
-    - Total Collections: ${
-      analysisData.deployer.flaunchStats?.totalCollections || 0
-    }
-    - Successful Launches: ${
-      analysisData.deployer.flaunchStats?.successfulLaunches || 0
-    }
-    - Potential Rugs: ${
-      analysisData.deployer.flaunchStats?.potentialRugs || 0
-    }`;
+    - Airdrop: ${analysisData.holderStatistics.holdersByAcquisition.airdrop}`;
 
-    const AnalysisResponseSchema = z.object({
-      result: z.string().describe("A score from 0-100 and brief summary"),
-      explanation: z.object({
-        summary: z.string().describe("Overall analysis of the token"),
-        insights: z.array(z.string().describe("Key insight about the token")),
-      }),
-    });
-
-    const completion = await openai.chat.completions.create({
+    const completion = await openai.beta.chat.completions.parse({
+      model: "gpt-4o-2024-08-06",
       messages: [
         {
           role: "system",
           content:
-            "Assume yourself as the persona of top 1% crypto token analysis expert. Analyze the provided token data and generate insights. Return your response as a JSON object with the following structure: { result: string, explanation: { summary: string, insights: string[] } }",
+            "You are a token analysis assistant. Provide exactly 4 insights: 1) Holder count analysis, 2) Top 10 holders analysis, 3) Acquisition methods analysis, 4) Overall risk assessment. Each insight must be 1-2 sentences.",
         },
         { role: "user", content: prompt },
       ],
-      model: "gpt-4o-2024-08-06",
-      temperature: 0.7,
-      response_format: { type: "json_object" },
+      response_format: zodResponseFormat(TokenAnalysis, "token_analysis"),
     });
 
-    if (!completion.choices[0]?.message?.content) {
-      throw new Error("No content in OpenAI response");
-    }
-
-    // Handle potential refusal
-    if (completion.choices[0].message.refusal) {
-      throw new Error(
-        `AI refused to analyze: ${completion.choices[0].message.refusal}`
-      );
-    }
-
-    const parsed = AnalysisResponseSchema.parse(
-      JSON.parse(completion.choices[0].message.content)
-    );
-    const { result, explanation } = parsed;
-
-    // Parse the score from the result string
-    const scoreMatch = result.match(/(\d+)/);
-    const score = scoreMatch ? parseInt(scoreMatch[0], 10) : 0;
+    const analysis = completion.choices[0].message.parsed;
 
     return {
-      score,
-      insights: explanation.insights,
-      analysis: explanation.summary,
+      score: analysis?.result?.score ?? 0,
+      insights: analysis?.insights ?? [],
+      analysis: analysis?.result?.summary ?? "",
     };
   } catch (error: any) {
     console.error("Error generating AI analysis:", error);

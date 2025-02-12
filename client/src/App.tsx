@@ -164,13 +164,3 @@ function App() {
 }
 
 export default App;
-
-/**
- *           <h1
-            onClick={() => setCurrentPage("home")}
-            className="text-4xl font-serif bg-gradient-to-r white bg-clip-text animate-pulse cursor-pointer hover:from-yellow-400 hover:to-amber-200 transition-all duration-300"
-            style={{ textShadow: "2px 2px 4px rgba(0, 0, 0, 0.3)" }}
-          >
-            thirdeye
-          </h1>
- */
