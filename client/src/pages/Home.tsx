@@ -50,15 +50,14 @@ export const Home: React.FC<HomeProps> = ({ onAnalyze }) => {
           <div className="max-w-4xl mx-auto">
             <div className="bg-red-500/20 backdrop-blur-lg rounded-lg p-4 border border-red-500/40 shadow-lg animate-pulse">
               <div className="flex items-center justify-between">
-                <div className="flex items-center gap-3">
+
+                <div className="flex justify-center items-center gap-3">
                   <Siren className="w-6 h-6 text-red-500 animate-bounce" />
                   <div>
-                    <p className="font-carbonic text-red-500">
-                      LIVE RUG ALERT!
+                    <p className="font-carbonic text-red-500 ">
+                      We only support flaunch and flaunched coins
                     </p>
-                    <p className="text-sm text-gray-300">
-                      $SCAM token: Liquidity pulled 2 minutes ago
-                    </p>
+                    {/* <p className="text-sm text-gray-300">Flaunch ftw</p> */}
                   </div>
                 </div>
                 <button
@@ -235,6 +234,7 @@ export const Home: React.FC<HomeProps> = ({ onAnalyze }) => {
             <h3 className="font-carbonic text-xl mb-2">AI Twitter Agent</h3>
             <p className="font-suisse text-gray-400">
               Get instant token analysis by tagging our AI agent in your tweets
+              or tweet replies when you see KOL shills random shitter
             </p>
           </div>
 
