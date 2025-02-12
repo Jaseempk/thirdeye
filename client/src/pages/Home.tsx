@@ -3,18 +3,15 @@ import {
   Rocket,
   Shield,
   Search,
-  // Zap,
   ExternalLink,
   Twitter,
-  // Flame,
-  // TrendingUp,
-  // DollarSign,
   Sparkles,
   Siren,
   Bot,
   Crown,
   AlertTriangle,
-  // MessageCircle,
+  CheckCircle2,
+  CircleDot,
 } from "lucide-react";
 import { TokenCard } from "../components/TokenCard";
 import { ConnectButton } from "../components/ConnectButton";
@@ -37,6 +34,40 @@ const tokenOfTheDay = {
   liquidityLocked: true,
 };
 
+const roadmapItems = [
+  {
+    title: "Token Analysis",
+    description:
+      "Advanced AI-powered token analysis with comprehensive risk assessment and holder analytics",
+    status: "completed",
+    icon: Shield,
+  },
+  {
+    title: "Twitter AI Agent",
+    description:
+      "Get instant token analysis by tagging our AI agent in your tweets when you see KOL shills",
+    status: "upcoming",
+    icon: Bot,
+    eta: "Q1 2025",
+  },
+  {
+    title: "Flaunch Integration",
+    description:
+      "Daily scanning of Flaunch launchpad to identify and rank the most promising new tokens",
+    status: "upcoming",
+    icon: Rocket,
+    eta: "Q1 2025",
+  },
+  {
+    title: "Community Governance",
+    description:
+      "Decentralized decision-making for feature prioritization and platform development",
+    status: "planned",
+    icon: Crown,
+    eta: "Q2 2025",
+  },
+];
+
 export const Home: React.FC<HomeProps> = ({ onAnalyze }) => {
   const [tokenAddress, setTokenAddress] = React.useState("");
   const { isConnected } = useAccount();
@@ -50,7 +81,6 @@ export const Home: React.FC<HomeProps> = ({ onAnalyze }) => {
           <div className="max-w-4xl mx-auto">
             <div className="bg-red-500/20 backdrop-blur-lg rounded-lg p-4 border border-red-500/40 shadow-lg animate-pulse">
               <div className="flex items-center justify-between">
-
                 <div className="flex justify-center items-center gap-3">
                   <Siren className="w-6 h-6 text-red-500 animate-bounce" />
                   <div>
@@ -256,6 +286,111 @@ export const Home: React.FC<HomeProps> = ({ onAnalyze }) => {
             <p className="font-suisse text-gray-400">
               Real-time notifications when suspicious activity is detected
             </p>
+          </div>
+        </div>
+      </section>
+
+      {/* Roadmap Section */}
+      <section className="container mx-auto px-4 py-12 md:py-20 mb-12 md:mb-20">
+        <div className="text-center mb-8 md:mb-12">
+          <div className="inline-flex items-center gap-2 px-3 md:px-4 py-1.5 md:py-2 bg-primary/20 rounded-full mb-4">
+            <Rocket className="w-3.5 h-3.5 md:w-4 md:h-4 text-primary" />
+            <span className="text-xs md:text-sm font-suisse">
+              Project Roadmap
+            </span>
+          </div>
+          <h2 className="font-carbonic text-3xl md:text-4xl lg:text-5xl mb-3 md:mb-4">
+            Building The Future
+          </h2>
+          <p className="font-suisse text-sm md:text-base text-gray-400 max-w-2xl mx-auto">
+            Our mission to make trenches safer, one token at a time
+          </p>
+        </div>
+
+        <div className="relative max-w-5xl mx-auto">
+          {/* Vertical line for desktop */}
+          <div className="hidden lg:block absolute left-1/2 top-8 bottom-8 w-px bg-gradient-to-b from-primary/0 via-primary/20 to-primary/0"></div>
+
+          <div className="space-y-6 md:space-y-12 lg:space-y-0">
+            {roadmapItems.map((item, index) => (
+              <div
+                key={item.title}
+                className={`relative flex flex-col lg:flex-row gap-6 lg:gap-12 ${
+                  index % 2 === 0 ? "lg:flex-row-reverse" : ""
+                }`}
+              >
+                {/* Content */}
+                <div
+                  className={`flex-1 ${index % 2 === 0 ? "lg:text-right" : ""}`}
+                >
+                  <div className="bg-black/20 backdrop-blur-sm rounded-xl p-4 md:p-6 border border-primary/20 hover:border-primary/40 transition-all duration-300 hover:-translate-y-1">
+                    <div
+                      className={`flex items-center gap-3 mb-3 md:mb-4 ${
+                        index % 2 === 0 ? "lg:flex-row-reverse" : ""
+                      }`}
+                    >
+                      <div className="w-10 h-10 md:w-12 md:h-12 rounded-lg bg-primary/10 flex items-center justify-center flex-shrink-0">
+                        <item.icon className="w-5 h-5 md:w-6 md:h-6 text-primary" />
+                      </div>
+                      <h3 className="font-carbonic text-lg md:text-xl lg:text-2xl">
+                        {item.title}
+                      </h3>
+                    </div>
+                    <p className="font-suisse text-sm md:text-base text-gray-400 mb-4">
+                      {item.description}
+                    </p>
+                    <div
+                      className={`flex items-center gap-2 ${
+                        index % 2 === 0 ? "lg:justify-end" : ""
+                      }`}
+                    >
+                      {item.status === "completed" ? (
+                        <>
+                          <CheckCircle2 className="w-4 h-4 text-green-400" />
+                          <span className="text-green-400 text-xs md:text-sm font-suisse">
+                            Completed
+                          </span>
+                        </>
+                      ) : item.status === "upcoming" ? (
+                        <>
+                          <CircleDot className="w-4 h-4 text-primary animate-pulse" />
+                          <span className="text-primary text-xs md:text-sm font-suisse">
+                            Coming {item.eta}
+                          </span>
+                        </>
+                      ) : (
+                        <>
+                          <CircleDot className="w-4 h-4 text-gray-400" />
+                          <span className="text-gray-400 text-xs md:text-sm font-suisse">
+                            Planned for {item.eta}
+                          </span>
+                        </>
+                      )}
+                    </div>
+                  </div>
+                </div>
+
+                {/* Timeline dot for desktop */}
+                <div className="hidden lg:flex items-center justify-center w-12">
+                  <div className="relative">
+                    <div
+                      className={`w-5 h-5 rounded-full ${
+                        item.status === "completed"
+                          ? "bg-green-400"
+                          : item.status === "upcoming"
+                          ? "bg-primary animate-pulse"
+                          : "bg-gray-400"
+                      }`}
+                    >
+                      <div className="absolute inset-0 rounded-full animate-ping opacity-75 bg-inherit"></div>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Empty div for layout */}
+                <div className="flex-1 hidden lg:block"></div>
+              </div>
+            ))}
           </div>
         </div>
       </section>
