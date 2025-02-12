@@ -21,6 +21,8 @@ import {
   formatHolderPercentage,
 } from "../utils/formatters";
 
+import { getEthPrice } from "@/utils/price";
+
 interface TokenAnalyticsProps {
   address: string;
   tokenData?: TokenAnalyticsData;
@@ -49,6 +51,22 @@ export const TokenAnalytics: React.FC<TokenAnalyticsProps> = ({
     null
   );
   const somNumber = 70;
+
+  const [ethPrice, setEthPrice] = React.useState<number>(0);
+
+  React.useEffect(() => {
+    const fetchEthPrice = async () => {
+      const price = await getEthPrice();
+
+      setEthPrice(price);
+    };
+    fetchEthPrice();
+  }, []);
+
+  const mcInEth = formatNumber(
+    Number(tokenData?.analysis?.deployer?.tokenInfo?.marketCap)
+  );
+  const mcInUsd = Number(mcInEth) * ethPrice;
 
   // Process top holders data for pie chart
   const processHoldersData = (): HolderDistributionItem[] => {
@@ -146,77 +164,101 @@ export const TokenAnalytics: React.FC<TokenAnalyticsProps> = ({
 
   if (!tokenData) {
     return (
-      <div className="p-6">
-        <div className="flex flex-col gap-4 mb-8">
-          <div className="flex gap-4">
-            <input
-              type="text"
-              value={searchAddress}
-              onChange={(e) => setSearchAddress(e.target.value)}
-              placeholder="Enter token address..."
-              className="flex-1 bg-black/20 border border-primary/20 rounded-lg px-4 py-2 text-white font-suisse"
-            />
-            <button
-              onClick={() => onAnalyze(searchAddress)}
-              disabled={isLoading}
-              className="bg-primary px-6 py-2 rounded-lg font-suisse flex items-center gap-2 disabled:opacity-50"
-            >
-              {isLoading ? (
-                <Loader2 className="w-4 h-4 animate-spin" />
-              ) : (
-                <Search className="w-4 h-4" />
-              )}
-              {isLoading ? "Analyzing..." : "Analyze"}
-            </button>
+      <div className="container mx-auto max-w-4xl">
+        <div className="bg-black/20 backdrop-blur-sm rounded-xl p-4 md:p-6">
+          <div className="flex flex-col gap-4 md:gap-6">
+            {/* Search Input and Button */}
+            <div className="flex flex-col sm:flex-row gap-3 sm:gap-4">
+              <input
+                type="text"
+                value={searchAddress}
+                onChange={(e) => setSearchAddress(e.target.value)}
+                placeholder="Enter token address..."
+                className="flex-1 bg-black/20 border border-primary/20 rounded-lg px-3 md:px-4 py-2.5 md:py-3 text-white font-suisse text-sm md:text-base placeholder:text-gray-500"
+              />
+              <button
+                onClick={() => onAnalyze(searchAddress)}
+                disabled={isLoading}
+                className="bg-gradient-to-r from-[#E7692C] to-[#EB88EF] px-4 md:px-6 py-2.5 md:py-3 rounded-lg font-nohemi flex items-center justify-center gap-2 disabled:opacity-50 hover:opacity-90 transition-opacity min-w-[120px] md:min-w-[140px]"
+              >
+                {isLoading ? (
+                  <Loader2 className="w-4 h-4 md:w-5 md:h-5 animate-spin" />
+                ) : (
+                  <Search className="w-4 h-4 md:w-5 md:h-5" />
+                )}
+                <span className="text-sm md:text-base">
+                  {isLoading ? "Analyzing..." : "Analyze"}
+                </span>
+              </button>
+            </div>
+
+            {/* Error Message */}
+            {error && (
+              <div className="bg-red-500/20 border border-red-500/40 rounded-lg p-3 md:p-4">
+                <div className="text-red-400 font-suisse text-sm md:text-base flex items-center gap-2">
+                  <AlertTriangle className="w-4 h-4 md:w-5 md:h-5 flex-shrink-0" />
+                  <span>{error}</span>
+                </div>
+              </div>
+            )}
+
+            {/* Loading State */}
+            {isLoading && (
+              <div className="flex flex-col items-center justify-center py-8 md:py-12">
+                <div className="relative">
+                  <Loader2 className="w-12 h-12 md:w-16 md:h-16 text-primary animate-spin" />
+                  <div className="absolute inset-0 bg-gradient-to-r from-primary/20 to-accent/20 rounded-full blur-xl" />
+                </div>
+                <div className="mt-6 md:mt-8 text-center">
+                  <p className="text-gray-300 font-nohemi text-base md:text-lg mb-2">
+                    Analyzing token data...
+                  </p>
+                  <p className="text-gray-500 font-suisse text-sm md:text-base">
+                    This might take a few moments
+                  </p>
+                </div>
+              </div>
+            )}
           </div>
-          {error && (
-            <div className="text-red-400 font-suisse text-sm flex items-center gap-2">
-              <AlertTriangle className="w-4 h-4" />
-              {error}
-            </div>
-          )}
-          {isLoading && (
-            <div className="flex flex-col items-center justify-center py-12">
-              <Loader2 className="w-8 h-8 text-primary animate-spin mb-4" />
-              <p className="text-gray-400 font-suisse text-sm">
-                Analyzing token data...
-              </p>
-              <p className="text-gray-500 font-suisse text-xs mt-2">
-                This might take a few moments
-              </p>
-            </div>
-          )}
         </div>
       </div>
     );
   }
-
   return (
     <div className="space-y-6">
       {/* Token Header */}
-      <div className="bg-black/20 rounded-xl p-6 backdrop-blur-sm border border-primary/20">
-        <div className="flex items-center justify-between mb-4">
-          <div>
-            <h2 className="font-carbonic text-3xl">{tokenData?.tokenName}</h2>
+      <div className="bg-black/20 rounded-xl p-4 md:p-6 backdrop-blur-sm border border-primary/20">
+        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 sm:gap-6">
+          {/* Token Info */}
+          <div className="flex-1 min-w-0">
+            {" "}
+            {/* min-w-0 prevents flex child from overflowing */}
+            <h2 className="font-carbonic text-2xl md:text-3xl truncate">
+              {tokenData?.tokenName}
+            </h2>
             <div className="flex items-center gap-2 mt-1">
-              <span className="text-gray-400 font-suisse">
+              <span className="text-gray-400 font-suisse text-sm md:text-base">
                 ${tokenData?.tokenSymbol}
               </span>
               <button
                 onClick={() =>
                   navigator.clipboard.writeText(tokenData?.contractAddress)
                 }
-                className="text-gray-400 hover:text-white transition-colors"
+                className="text-gray-400 hover:text-white transition-colors p-1"
               >
-                <Copy className="w-4 h-4" />
+                <Copy className="w-3.5 h-3.5 md:w-4 md:h-4" />
               </button>
             </div>
           </div>
-          <div className="text-right">
-            <div className="text-4xl font-carbonic bg-gradient-to-r from-primary to-accent text-transparent bg-clip-text">
+
+          {/* Safety Score */}
+          <div className="flex sm:flex-col items-center sm:items-end gap-2 sm:gap-0">
+            <div className="text-2xl sm:text-3xl md:text-4xl font-carbonic bg-gradient-to-r from-primary to-accent text-transparent bg-clip-text">
               {formatPercentage(tokenData.score)}
             </div>
-            <p className="text-sm text-gray-400 font-suisse">Safety Score</p>
+            <p className="text-xs sm:text-sm text-gray-400 font-suisse">
+              Safety Score
+            </p>
           </div>
         </div>
       </div>
@@ -273,12 +315,7 @@ export const TokenAnalytics: React.FC<TokenAnalyticsProps> = ({
             </div>
             <div className="flex justify-between items-center">
               <span className="text-gray-400">MarketCap:</span>
-              <span>
-                {formatNumber(
-                  Number(tokenData.analysis?.deployer?.tokenInfo?.marketCap)
-                )}{" "}
-                ETH
-              </span>
+              <span>${mcInUsd}</span>
             </div>
             <div className="flex justify-between items-center">
               <span className="text-gray-400">Volum24h:</span>
@@ -865,24 +902,24 @@ export const TokenAnalytics: React.FC<TokenAnalyticsProps> = ({
       </div>
 
       {/* Action Buttons */}
-      <div className="flex gap-4">
+      <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 px-4 sm:px-0">
         <a
           href={`https://twitter.com/search?q=${tokenData.tokenSymbol}`}
           target="_blank"
           rel="noopener noreferrer"
-          className="flex-1 bg-[#1DA1F2] hover:bg-[#1a8cd8] transition-colors px-6 py-3 rounded-lg font-suisse flex items-center justify-center gap-2"
+          className="flex-1 bg-[#1DA1F2] hover:bg-[#1a8cd8] transition-colors px-4 sm:px-6 py-2.5 sm:py-3 rounded-lg font-suisse flex items-center justify-center gap-2 text-sm sm:text-base"
         >
-          <Twitter className="w-4 h-4" />
-          View on Twitter
+          <Twitter className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
+          <span className="whitespace-nowrap">View on Twitter</span>
         </a>
         <a
           href={`https://flaunch.gg/base/coin/${tokenData?.contractAddress}`}
           target="_blank"
           rel="noopener noreferrer"
-          className="flex-1 bg-gradient-to-r from-primary to-accent hover:opacity-90 transition-opacity px-6 py-3 rounded-lg font-suisse flex items-center justify-center gap-2"
+          className="flex-1 bg-gradient-to-r from-primary to-accent hover:opacity-90 transition-opacity px-4 sm:px-6 py-2.5 sm:py-3 rounded-lg font-suisse flex items-center justify-center gap-2 text-sm sm:text-base"
         >
-          <ExternalLink className="w-4 h-4" />
-          Buy on Flaunch
+          <ExternalLink className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
+          <span className="whitespace-nowrap">Buy on Flaunch</span>
         </a>
       </div>
     </div>
