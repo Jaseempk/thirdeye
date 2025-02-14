@@ -25,7 +25,7 @@ interface HomeProps {
 }
 
 const tokenOfTheDay = {
-  name: "$TEYE",
+  name: "$SOON",
   address: "2PHi2f7xPq6bnh2J6xRN2Qc5TJ37epHihvBk49DgpAaU",
   imageUrl:
     "https://images.unsplash.com/photo-1639762681485-074b7f938ba0?auto=format&fit=crop&q=80&w=2832",
@@ -50,7 +50,6 @@ export const Home: React.FC<HomeProps> = ({ onAnalyze }) => {
           <div className="max-w-4xl mx-auto">
             <div className="bg-red-500/20 backdrop-blur-lg rounded-lg p-4 border border-red-500/40 shadow-lg animate-pulse">
               <div className="flex items-center justify-between">
-
                 <div className="flex justify-center items-center gap-3">
                   <Siren className="w-6 h-6 text-red-500 animate-bounce" />
                   <div>
