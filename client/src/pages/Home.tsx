@@ -9,7 +9,7 @@ import {
   Siren,
   Bot,
   Crown,
-  AlertTriangle,
+  // AlertTriangle,
   CheckCircle2,
   CircleDot,
 } from "lucide-react";
@@ -53,7 +53,7 @@ const roadmapItems = [
   {
     title: "Flaunch Integration",
     description:
-      "Daily scanning of Flaunch launchpad to identify and rank the most promising new tokens",
+      "Daily scanning of Flaunch to identify and rank the most promising new tokens",
     status: "upcoming",
     icon: Rocket,
     eta: "Q1 2025",
@@ -237,58 +237,6 @@ export const Home: React.FC<HomeProps> = ({ onAnalyze }) => {
           </div>
         </section>
       )}
-
-      {/* Features */}
-      <section id="features" className="container mx-auto px-4 mb-20">
-        <div className="text-center mb-10">
-          <h2 className="font-carbonic text-4xl mb-4">Why Choose thirdeye</h2>
-          <p className="font-suisse text-gray-400">
-            Stay ahead of the game with our advanced features
-          </p>
-        </div>
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-          <div className="bg-black/20 backdrop-blur-sm border border-primary/20 rounded-xl p-6 hover:border-primary/40 transition-all duration-300 hover:-translate-y-1">
-            <div className="w-12 h-12 bg-primary/20 rounded-lg flex items-center justify-center mb-4">
-              <Shield className="w-6 h-6 text-primary" />
-            </div>
-            <h3 className="font-carbonic text-xl mb-2">Risk Analysis</h3>
-            <p className="font-suisse text-gray-400">
-              Advanced AI-powered risk scoring system to detect potential rugs
-            </p>
-          </div>
-
-          <div className="bg-black/20 backdrop-blur-sm border border-secondary/20 rounded-xl p-6 hover:border-secondary/40 transition-all duration-300 hover:-translate-y-1">
-            <div className="w-12 h-12 bg-secondary/20 rounded-lg flex items-center justify-center mb-4">
-              <Bot className="w-6 h-6 text-secondary" />
-            </div>
-            <h3 className="font-carbonic text-xl mb-2">AI Twitter Agent</h3>
-            <p className="font-suisse text-gray-400">
-              Get instant token analysis by tagging our AI agent in your tweets
-              or tweet replies when you see KOL shills random shitter
-            </p>
-          </div>
-
-          <div className="bg-black/20 backdrop-blur-sm border border-accent/20 rounded-xl p-6 hover:border-accent/40 transition-all duration-300 hover:-translate-y-1">
-            <div className="w-12 h-12 bg-accent/20 rounded-lg flex items-center justify-center mb-4">
-              <Crown className="w-6 h-6 text-accent" />
-            </div>
-            <h3 className="font-carbonic text-xl mb-2">Community Voting</h3>
-            <p className="font-suisse text-gray-400">
-              Vote for the best tokens and earn rewards through airdrops
-            </p>
-          </div>
-
-          <div className="bg-black/20 backdrop-blur-sm border border-warning/20 rounded-xl p-6 hover:border-warning/40 transition-all duration-300 hover:-translate-y-1">
-            <div className="w-12 h-12 bg-warning/20 rounded-lg flex items-center justify-center mb-4">
-              <AlertTriangle className="w-6 h-6 text-warning" />
-            </div>
-            <h3 className="font-carbonic text-xl mb-2">Rug Alerts</h3>
-            <p className="font-suisse text-gray-400">
-              Real-time notifications when suspicious activity is detected
-            </p>
-          </div>
-        </div>
-      </section>
 
       {/* Roadmap Section */}
       <section className="container mx-auto px-4 py-12 md:py-20 mb-12 md:mb-20">

@@ -111,6 +111,7 @@ export interface TokenAnalyticsData {
   analysis: Analysis;
   score: number;
   createdAt: string;
+  imageUrl: string;
 }
 
 /*
