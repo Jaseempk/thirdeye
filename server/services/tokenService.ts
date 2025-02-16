@@ -15,7 +15,7 @@ export async function isTokenOnFlaunch(tokenAddress: string): Promise<boolean> {
 export async function getTokenInfo(tokenAddress: string): Promise<any> {
   try {
     console.log("Fetching token info from Flaunch subgraph...");
-    const query = `
+    const tokenDataQuery = `
       query {
         tokenDayDatas(where: {token: "${tokenAddress.toLowerCase()}"}, first: 1) {
           priceETH
@@ -52,6 +52,36 @@ export async function getTokenInfo(tokenAddress: string): Promise<any> {
             }
           }
         }
+        tokenSearch(text: "${tokenAddress.toLowerCase()}") {
+          logoHash
+          id
+          name
+          symbol
+          telegram
+          twitter
+          website
+          discord
+          description
+          collectionToken {
+            createdAt
+            creator {
+              id
+              ownedNFTs {
+                id
+                name
+                symbol
+                tokenID
+              }
+            }
+            marketCapETH
+            name
+            pool {
+              fairLaunchedEnded
+              liquidity
+              volumeETH
+            }
+          }
+        }
       }
     `;
 
@@ -60,7 +90,7 @@ export async function getTokenInfo(tokenAddress: string): Promise<any> {
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({ query }),
+      body: JSON.stringify({ query: tokenDataQuery }),
     });
 
     const data = await response.json();
@@ -73,16 +103,23 @@ export async function getTokenInfo(tokenAddress: string): Promise<any> {
       throw new Error("Token not found on Flaunch");
     }
 
-    return formatTokenInfo(data.data.tokenDayDatas[0]);
+    console.log("Data: ", data.data);
+
+    return formatTokenInfo(data.data.tokenDayDatas[0], data.data.tokenSearch);
   } catch (error: any) {
     console.error("Error fetching token info:", error);
     throw new Error(`Failed to fetch token info: ${error.message}`);
   }
 }
 
-function formatTokenInfo(tokenData: any) {
+function formatTokenInfo(tokenData: any, metadataData: any) {
   const collectionToken = tokenData.pool.bidWall.collectionToken;
   const creatorId = collectionToken.collection.creator.id;
+
+  // Get the first result from tokenSearch array
+  const metadata = metadataData?.[0] || {};
+
+  console.log("Metadata:", metadata);
 
   return {
     raw: tokenData,
@@ -121,6 +158,33 @@ function formatTokenInfo(tokenData: any) {
         totalFeesETH: tokenData.pool.totalFeesETH,
         volumeETH: tokenData.pool.volumeETH,
       },
+    },
+    metadata: {
+      logoUrl: metadata?.logoHash
+        ? `https://ipfs.io/ipfs/${metadata.logoHash.replace("ipfs://", "")}`
+        : null,
+      name: metadata?.name || "",
+      symbol: metadata?.symbol || "",
+      social: {
+        telegram: metadata?.telegram,
+        twitter: metadata?.twitter,
+        website: metadata?.website,
+        discord: metadata?.discord,
+      },
+      description: metadata?.description,
+      creator: {
+        id: metadata?.collectionToken?.creator?.id || "",
+        ownedNFTs: metadata?.collectionToken?.creator?.ownedNFTs || [],
+      },
+      marketCapETH: metadata?.collectionToken?.marketCapETH || "0",
+      poolStats: {
+        fairLaunchedEnded:
+          metadata?.collectionToken?.pool?.fairLaunchedEnded || false,
+        liquidity: metadata?.collectionToken?.pool?.liquidity || "0",
+        volumeETH: metadata?.collectionToken?.pool?.volumeETH || "0",
+      },
+      createdAt:
+        metadata?.collectionToken?.createdAt || new Date().toISOString(),
     },
   };
 }

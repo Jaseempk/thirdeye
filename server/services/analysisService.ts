@@ -1,18 +1,9 @@
 import { ethers } from "ethers";
 import { TokenAnalysisData, InsertTokenAnalysis } from "@shared/schema";
 import { storage } from "../storage";
-import {
-  getTokenHolders,
-  getHolderStatistics,
-} from "./moralisService";
-import {
-  isTokenOnFlaunch,
-  getTokenInfo,
-} from "./tokenService";
-import {
-  calculateLiquidityScore,
-  calculateScore,
-} from "./scoringService";
+import { getTokenHolders, getHolderStatistics } from "./moralisService";
+import { isTokenOnFlaunch, getTokenInfo } from "./tokenService";
+import { calculateLiquidityScore, calculateScore } from "./scoringService";
 
 export async function listAnalyses() {
   return storage.listAnalyses();
@@ -69,6 +60,8 @@ export async function createAnalysis(data: InsertTokenAnalysis) {
       deployer: tokenData.formatted,
       launchedOnFlaunch,
       holderStatistics: holderStats,
+      metadata: tokenData?.metadata,
+      aiAnalysis: undefined,
     },
   };
 

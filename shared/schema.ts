@@ -73,6 +73,37 @@ export const aiInsightSchema = z.object({
   analysis: z.string(),
 });
 
+export const tokenMetadataSchema = z.object({
+  logoUrl: z.string().nullable(),
+  name: z.string(),
+  symbol: z.string(),
+  social: z.object({
+    telegram: z.string().nullable(),
+    twitter: z.string().nullable(),
+    website: z.string().nullable(),
+    discord: z.string().nullable(),
+  }),
+  description: z.string().nullable(),
+  creator: z.object({
+    id: z.string(),
+    ownedNFTs: z.array(
+      z.object({
+        id: z.string(),
+        name: z.string(),
+        symbol: z.string(),
+        tokenID: z.string(),
+      })
+    ),
+  }),
+  marketCapETH: z.string(),
+  poolStats: z.object({
+    fairLaunchedEnded: z.boolean(),
+    liquidity: z.string(),
+    volumeETH: z.string(),
+  }),
+  createdAt: z.string(),
+});
+
 export const tokenAnalysisSchema = z.object({
   holderCount: z.number(),
   liquidityScore: z.number(),
@@ -83,9 +114,11 @@ export const tokenAnalysisSchema = z.object({
   launchedOnFlaunch: z.boolean(),
   holderStatistics: holderStatisticsSchema,
   aiAnalysis: aiInsightSchema.optional(),
+  metadata: tokenMetadataSchema,
 });
 
 export type TokenAnalysisData = z.infer<typeof tokenAnalysisSchema>;
+
 export type Holder = z.infer<typeof holderSchema>;
 export type Deployer = z.infer<typeof deployerSchema>;
 
