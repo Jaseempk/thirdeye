@@ -1,14 +1,42 @@
 import { TokenAnalysisData } from "@shared/schema";
-import { z } from "zod";
-import { openai } from "./config";
-import { zodResponseFormat } from "openai/helpers/zod";
+import { GoogleGenerativeAI, SchemaType } from "@google/generative-ai";
 
-const TokenAnalysis = z.object({
-  result: z.object({
-    score: z.number(),
-    summary: z.string(),
-  }),
-  insights: z.array(z.string()),
+const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY || "");
+
+const schema = {
+  type: SchemaType.OBJECT,
+  properties: {
+    result: {
+      type: SchemaType.OBJECT,
+      properties: {
+        score: {
+          type: SchemaType.NUMBER,
+          description: "Analysis score between 0 and 100",
+        },
+        summary: {
+          type: SchemaType.STRING,
+          description: "Overall analysis summary",
+        },
+      },
+      required: ["score", "summary"],
+    },
+    insights: {
+      type: SchemaType.ARRAY,
+      items: {
+        type: SchemaType.STRING,
+        description: "Individual analysis insights",
+      },
+    },
+  },
+  required: ["result", "insights"],
+};
+
+const model = genAI.getGenerativeModel({
+  model: "gemini-2.0-flash-lite-preview-02-05",
+  generationConfig: {
+    responseMimeType: "application/json",
+    responseSchema: schema,
+  },
 });
 
 export async function generateAIAnalysis(analysisData: TokenAnalysisData) {
@@ -31,27 +59,22 @@ export async function generateAIAnalysis(analysisData: TokenAnalysisData) {
     Acquisition Methods:
     - Swap: ${analysisData.holderStatistics.holdersByAcquisition.swap}
     - Transfer: ${analysisData.holderStatistics.holdersByAcquisition.transfer}
-    - Airdrop: ${analysisData.holderStatistics.holdersByAcquisition.airdrop}`;
+    - Airdrop: ${analysisData.holderStatistics.holdersByAcquisition.airdrop}
 
-    const completion = await openai.beta.chat.completions.parse({
-      model: "gpt-4o-2024-08-06",
-      messages: [
-        {
-          role: "system",
-          content:
-            "You are a token analysis assistant. Provide exactly 4 insights: 1) Holder count analysis, 2) Top 10 holders analysis, 3) Acquisition methods analysis, 4) Overall risk assessment. Each insight must be 1-2 sentences.",
-        },
-        { role: "user", content: prompt },
-      ],
-      response_format: zodResponseFormat(TokenAnalysis, "token_analysis"),
-    });
+    Provide the analysis in this exact format:
+    1) Holder count analysis
+    2) Top 10 holders analysis
+    3) Acquisition methods analysis
+    4) Overall risk assessment
+    Each insight must be 1-2 sentences.`;
 
-    const analysis = completion.choices[0].message.parsed;
+    const result = await model.generateContent(prompt);
+    const response = JSON.parse(result.response.text());
 
     return {
-      score: analysis?.result?.score ?? 0,
-      insights: analysis?.insights ?? [],
-      analysis: analysis?.result?.summary ?? "",
+      score: response.result.score,
+      insights: response.insights,
+      analysis: response.result.summary,
     };
   } catch (error: any) {
     console.error("Error generating AI analysis:", error);
@@ -59,7 +82,6 @@ export async function generateAIAnalysis(analysisData: TokenAnalysisData) {
       message: error.message,
       name: error.name,
       stack: error.stack,
-      response: error.response?.data,
     });
     throw new Error(`Failed to generate AI analysis: ${error.message}`);
   }
