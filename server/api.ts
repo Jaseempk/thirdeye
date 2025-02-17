@@ -318,6 +318,7 @@ export function calculateLiquidityScore(token: any): number {
 
     // Base Liquidity Score (60% weight)
     const totalRaised = parseFloat(token.fairLaunch.totalRaised || "0");
+    console.log("tootalRaaised:", totalRaised);
     const baseLiquidityScore = Math.min(60, (totalRaised / 1e18) * 20); // Scale based on ETH raised
 
     // Launch Status Score (20% weight)

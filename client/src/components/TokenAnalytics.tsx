@@ -53,6 +53,7 @@ export const TokenAnalytics: React.FC<TokenAnalyticsProps> = ({
   const somNumber = 70;
 
   const [ethPrice, setEthPrice] = React.useState<number>(0);
+  const [builderScore, setBuilderScore] = React.useState<number>(0);
 
   React.useEffect(() => {
     const fetchEthPrice = async () => {
@@ -60,6 +61,7 @@ export const TokenAnalytics: React.FC<TokenAnalyticsProps> = ({
 
       setEthPrice(price);
     };
+
     fetchEthPrice();
   }, []);
 
@@ -67,6 +69,27 @@ export const TokenAnalytics: React.FC<TokenAnalyticsProps> = ({
     Number(tokenData?.analysis?.deployer?.tokenInfo?.marketCap)
   );
   const mcInUsd = Number(mcInEth) * ethPrice;
+  if (tokenData?.analysis?.deployer?.address) {
+    const fetchBuilderScore = async () => {
+      console.log("deployer:", tokenData?.analysis?.deployer?.address);
+      const response = await fetch(
+        `https://api.talentprotocol.com/api/v2/passports/${tokenData?.analysis?.deployer?.address}`,
+        {
+          method: "GET",
+          headers: {
+            "x-api-key":
+              "aa96ca991e7766834efe5e4caee803866a1c67dad2d11016b11d56f77a1a",
+          },
+        }
+      );
+      const data = await response.json();
+
+      const _builderScore = data.passport.score;
+      setBuilderScore(_builderScore);
+    };
+
+    fetchBuilderScore();
+  }
 
   // Process top holders data for pie chart
   const processHoldersData = (): HolderDistributionItem[] => {
@@ -226,28 +249,45 @@ export const TokenAnalytics: React.FC<TokenAnalyticsProps> = ({
   }
   return (
     <div className="space-y-6">
-      {/* Token Header */}
       <div className="bg-black/20 rounded-xl p-4 md:p-6 backdrop-blur-sm border border-primary/20">
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 sm:gap-6">
           {/* Token Info */}
           <div className="flex-1 min-w-0">
-            {" "}
-            {/* min-w-0 prevents flex child from overflowing */}
-            <h2 className="font-carbonic text-2xl md:text-3xl truncate">
-              {tokenData?.tokenName}
-            </h2>
-            <div className="flex items-center gap-2 mt-1">
-              <span className="text-gray-400 font-suisse text-sm md:text-base">
-                ${tokenData?.tokenSymbol}
-              </span>
-              <button
-                onClick={() =>
-                  navigator.clipboard.writeText(tokenData?.contractAddress)
-                }
-                className="text-gray-400 hover:text-white transition-colors p-1"
-              >
-                <Copy className="w-3.5 h-3.5 md:w-4 md:h-4" />
-              </button>
+            <div className="flex items-center gap-4">
+              {/* Token Image */}
+              {tokenData?.imageUrl ? (
+                <img
+                  src={tokenData.imageUrl}
+                  alt={tokenData.tokenName}
+                  className="w-12 h-12 md:w-14 md:h-14 rounded-full object-cover ring-2 ring-primary/20 animate-float"
+                />
+              ) : (
+                <div className="w-12 h-12 md:w-14 md:h-14 rounded-full bg-gradient-to-br from-primary/20 to-accent/20 flex items-center justify-center ring-2 ring-primary/20">
+                  <span className="font-carbonic text-xl md:text-2xl text-primary/60">
+                    {tokenData?.tokenSymbol?.[0] || "?"}
+                  </span>
+                </div>
+              )}
+              <div className="min-w-0">
+                {" "}
+                {/* Ensures text truncation works */}
+                <h2 className="font-carbonic text-2xl md:text-3xl truncate">
+                  {tokenData?.tokenName}
+                </h2>
+                <div className="flex items-center gap-2 mt-1">
+                  <span className="text-gray-400 font-suisse text-sm md:text-base">
+                    ${tokenData?.tokenSymbol}
+                  </span>
+                  <button
+                    onClick={() =>
+                      navigator.clipboard.writeText(tokenData?.contractAddress)
+                    }
+                    className="text-gray-400 hover:text-white transition-colors p-1"
+                  >
+                    <Copy className="w-3.5 h-3.5 md:w-4 md:h-4" />
+                  </button>
+                </div>
+              </div>
             </div>
           </div>
 
@@ -440,6 +480,11 @@ export const TokenAnalytics: React.FC<TokenAnalyticsProps> = ({
                   )[0]
                 }
               </span>
+            </div>
+
+            <div className="flex justify-between items-center">
+              <span className="text-gray-400">Dev builder-score:</span>
+              <span>{builderScore}</span>
             </div>
           </div>
         </div>
