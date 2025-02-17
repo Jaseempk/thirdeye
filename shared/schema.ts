@@ -104,6 +104,14 @@ export const tokenMetadataSchema = z.object({
   createdAt: z.string(),
 });
 
+export interface Analysis {
+  aiAnalysis?: {
+    score: number;
+    insights: string[];
+    analysis: string;
+  };
+}
+
 export const tokenAnalysisSchema = z.object({
   holderCount: z.number(),
   liquidityScore: z.number(),
@@ -113,7 +121,7 @@ export const tokenAnalysisSchema = z.object({
   deployer: deployerSchema,
   launchedOnFlaunch: z.boolean(),
   holderStatistics: holderStatisticsSchema,
-  aiAnalysis: aiInsightSchema.optional(),
+  aiAnalysis: aiInsightSchema.optional(), // Make sure it's optional here
   metadata: tokenMetadataSchema,
 });
 
