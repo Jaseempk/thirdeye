@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { TokenAnalytics } from "../components/TokenAnalytics";
 import { useTokenAnalytics } from "../hooks/useTokenAnalytics";
-import { TokenAnalyticsData } from "../types";
+import { TokenAnalysis } from "../types";
 
 interface AnalysisProps {
   address: string;
@@ -10,7 +10,7 @@ interface AnalysisProps {
 export const Analysis: React.FC<AnalysisProps> = ({
   address: initialAddress,
 }) => {
-  const [tokenData, setTokenData] = useState<TokenAnalyticsData | null>(null);
+  const [tokenData, setTokenData] = useState<TokenAnalysis | null>(null);
   const { analyzeToken, isLoading, error } = useTokenAnalytics();
 
   const handleAnalyze = async (address: string) => {

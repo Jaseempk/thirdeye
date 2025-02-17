@@ -13,7 +13,7 @@ import {
   TrendingUp,
 } from "lucide-react";
 import { PieChart } from "react-minimal-pie-chart";
-import { TokenAnalyticsData } from "../types";
+import { TokenAnalysis } from "../types";
 import {
   formatAddress,
   formatNumber,
@@ -25,7 +25,7 @@ import { getEthPrice } from "@/utils/price";
 
 interface TokenAnalyticsProps {
   address: string;
-  tokenData?: TokenAnalyticsData;
+  tokenData?: TokenAnalysis;
   onAnalyze: (address: string) => void;
   isLoading: boolean;
   error: string | null;
@@ -64,7 +64,7 @@ export const TokenAnalytics: React.FC<TokenAnalyticsProps> = ({
 
     fetchEthPrice();
   }, []);
-
+  //0x1c93d155bd388241f9ab5df500d69eb529ce9583
   const mcInEth = formatNumber(
     Number(tokenData?.analysis?.deployer?.tokenInfo?.marketCap)
   );
@@ -116,7 +116,7 @@ export const TokenAnalytics: React.FC<TokenAnalyticsProps> = ({
           title: formatAddress(holders[0].address),
           value: holders[0].percentage,
           color: "#EB88EF",
-          isContract: holders[0].isContract,
+          isContract: holders[0].isContract ?? false,
           isSingleHolder: true,
         },
       ];
@@ -160,7 +160,7 @@ export const TokenAnalytics: React.FC<TokenAnalyticsProps> = ({
       title: formatAddress(holder.address),
       value: holder.percentage,
       color: colors[index % colors.length],
-      isContract: holder.isContract,
+      isContract: holder.isContract ?? false,
     }));
 
     // Add "Others" segment if there are more holders
@@ -255,19 +255,19 @@ export const TokenAnalytics: React.FC<TokenAnalyticsProps> = ({
           <div className="flex-1 min-w-0">
             <div className="flex items-center gap-4">
               {/* Token Image */}
-              {tokenData?.imageUrl ? (
+              {/* {tokenData?.imageUrl ? (
                 <img
                   src={tokenData.imageUrl}
-                  alt={tokenData.tokenName}
+                  alt={tokenData.tokenName ?? 'Token Image'}
                   className="w-12 h-12 md:w-14 md:h-14 rounded-full object-cover ring-2 ring-primary/20 animate-float"
                 />
               ) : (
-                <div className="w-12 h-12 md:w-14 md:h-14 rounded-full bg-gradient-to-br from-primary/20 to-accent/20 flex items-center justify-center ring-2 ring-primary/20">
-                  <span className="font-carbonic text-xl md:text-2xl text-primary/60">
-                    {tokenData?.tokenSymbol?.[0] || "?"}
-                  </span>
-                </div>
-              )}
+              )} */}
+              <div className="w-12 h-12 md:w-14 md:h-14 rounded-full bg-gradient-to-br from-primary/20 to-accent/20 flex items-center justify-center ring-2 ring-primary/20">
+                <span className="font-carbonic text-xl md:text-2xl text-primary/60">
+                  {tokenData?.tokenSymbol?.[0] || "?"}
+                </span>
+              </div>
               <div className="min-w-0">
                 {" "}
                 {/* Ensures text truncation works */}

@@ -316,6 +316,12 @@ export function calculateLiquidityScore(token: any): number {
   try {
     if (!token || !token.fairLaunch) return 0;
 
+    //todo
+    /**
+     * liquiidity score(totalRaised should be equal to liquidity)
+     * age of the token
+     */
+
     // Base Liquidity Score (60% weight)
     const totalRaised = parseFloat(token.fairLaunch.totalRaised || "0");
     console.log("tootalRaaised:", totalRaised);
