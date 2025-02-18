@@ -1,5 +1,5 @@
 import React from "react";
-import { Home } from "./pages/Home";
+import { Home } from "../src/pages/Home";
 import { Analysis } from "./pages/Analysis";
 import { Vote } from "./pages/Vote";
 import { Terms } from "./pages/Terms";
