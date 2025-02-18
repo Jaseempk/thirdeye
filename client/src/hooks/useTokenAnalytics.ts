@@ -37,9 +37,9 @@ export const useTokenAnalytics = () => {
 
         return data;
       } catch (err) {
-        const message =
-          err instanceof Error ? err.message : "Failed to analyze token";
-        setError(message);
+        // const message =
+        //   err instanceof Error ? err.message : "Failed to analyze token";
+        setError("Failed to analyze token");
         throw err;
       }
     },

@@ -46,12 +46,12 @@ export interface Holder {
 export interface Deployer {
   address: string;
   flaunchStats?: {
+    totalCollections: number;
+    successfulLaunches: number;
+    potentialRugs: number;
     averageRaised: number;
     firstLaunchDate?: string;
     lastLaunchDate?: string;
-    potentialRugs: number;
-    successfulLaunches: number;
-    totalCollections: number;
   };
   poolStats?: {
     fairLaunchedEnded: boolean;
@@ -74,6 +74,7 @@ export interface Deployer {
     marketCap: string;
     totalFees: string;
     volume24h: string;
+    totalSupply: string;
     totalVolume: string;
     totalHolders: number;
   };
@@ -83,6 +84,35 @@ export interface AIAnalysis {
   score: number;
   insights: string[];
   analysis: string;
+}
+
+export interface TokenMetadata {
+  logoUrl: string | null;
+  name: string;
+  symbol: string;
+  social: {
+    telegram: string | null;
+    twitter: string | null;
+    website: string | null;
+    discord: string | null;
+  };
+  description: string | null;
+  creator: {
+    id: string;
+    ownedNFTs: Array<{
+      id: string;
+      name: string;
+      symbol: string;
+      tokenID: string;
+    }>;
+  };
+  marketCapETH: string;
+  poolStats: {
+    fairLaunchedEnded: boolean;
+    liquidity: string;
+    volumeETH: string;
+  };
+  createdAt: string;
 }
 
 export interface TokenAnalysisData {
@@ -95,6 +125,7 @@ export interface TokenAnalysisData {
   launchedOnFlaunch: boolean;
   holderStatistics: HolderStatistics;
   aiAnalysis?: AIAnalysis;
+  metadata: TokenMetadata;
 }
 
 export interface TokenAnalysis {
