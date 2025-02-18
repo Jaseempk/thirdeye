@@ -1,47 +1,4 @@
-// Token Types
-export interface TokenInfo {
-  name: string;
-  price: string;
-  symbol: string;
-  marketCap: string;
-  totalFees: string;
-  volume24h: string;
-  totalVolume: string;
-}
-
-export interface PoolStats {
-  flipped: boolean;
-  liquidity: string;
-  volumeETH: string;
-  totalFeesETH: string;
-  fairLaunchedEnded: boolean;
-}
-
-export interface FairLaunch {
-  active: boolean;
-  endsAt: string;
-  ethEarned: string;
-  initialSupply: string;
-  soldInitialSupply: string;
-}
-
-export interface FlaunchStats {
-  averageRaised: number;
-  potentialRugs: number;
-  lastLaunchDate: string;
-  firstLaunchDate: string;
-  totalCollections: number;
-  successfulLaunches: number;
-}
-
-export interface Deployer {
-  address: string;
-  fairLaunch: FairLaunch;
-  flaunchStats: FlaunchStats;
-  poolStats: PoolStats;
-  tokenInfo: TokenInfo;
-}
-
+// Basic type definitions
 export interface HolderChange {
   change: number;
   changePercent: number;
@@ -53,13 +10,19 @@ export interface HolderSupply {
 }
 
 export interface HolderStatistics {
+  totalHolders: number;
+  holdersByAcquisition: {
+    swap: number;
+    transfer: number;
+    airdrop: number;
+  };
   holderChange: {
-    "1h": HolderChange;
     "5min": HolderChange;
-    "3d": HolderChange;
+    "1h": HolderChange;
     "6h": HolderChange;
-    "7d": HolderChange;
     "24h": HolderChange;
+    "3d": HolderChange;
+    "7d": HolderChange;
     "30d": HolderChange;
   };
   holderSupply: {
@@ -70,49 +33,114 @@ export interface HolderStatistics {
     top250: HolderSupply;
     top500: HolderSupply;
   };
-  holdersByAcquisition: {
-    swap: number;
-    airdrop: number;
-    transfer: number;
+}
+
+export interface Holder {
+  address: string;
+  balance: string;
+  percentage: number;
+  isContract?: boolean;
+  addressLabel?: string | null;
+}
+
+export interface Deployer {
+  address: string;
+  flaunchStats?: {
+    totalCollections: number;
+    successfulLaunches: number;
+    potentialRugs: number;
+    averageRaised: number;
+    firstLaunchDate?: string;
+    lastLaunchDate?: string;
   };
-  totalHolders: number;
+  poolStats?: {
+    fairLaunchedEnded: boolean;
+    flipped: boolean;
+    liquidity: string;
+    totalFeesETH: string;
+    volumeETH: string;
+  };
+  fairLaunch?: {
+    active: boolean;
+    endsAt: string;
+    ethEarned: string;
+    initialSupply: string;
+    soldInitialSupply: string;
+  };
+  tokenInfo?: {
+    name: string;
+    price: string;
+    symbol: string;
+    marketCap: string;
+    totalFees: string;
+    volume24h: string;
+    totalSupply: string;
+    totalVolume: string;
+    totalHolders: number;
+  };
 }
 
 export interface AIAnalysis {
   score: number;
-  analysis: string;
   insights: string[];
+  analysis: string;
 }
 
-export interface Analysis {
-  aiAnalysis: AIAnalysis;
-  contractVerified: boolean;
-  deployer: Deployer;
+export interface TokenMetadata {
+  logoUrl: string | null;
+  name: string;
+  symbol: string;
+  social: {
+    telegram: string | null;
+    twitter: string | null;
+    website: string | null;
+    discord: string | null;
+  };
+  description: string | null;
+  creator: {
+    id: string;
+    ownedNFTs: Array<{
+      id: string;
+      name: string;
+      symbol: string;
+      tokenID: string;
+    }>;
+  };
+  marketCapETH: string;
+  poolStats: {
+    fairLaunchedEnded: boolean;
+    liquidity: string;
+    volumeETH: string;
+  };
+  createdAt: string;
+}
+
+export interface TokenAnalysisData {
   holderCount: number;
-  holderStatistics: HolderStatistics;
-  launchedOnFlaunch: boolean;
   liquidityScore: number;
+  contractVerified: boolean;
+  topHolders: Holder[];
   ownershipRatio: number;
-  topHolders: Array<{
-    address: string;
-    addressLabel: string;
-    balance: string;
-    isContract: boolean;
-    percentage: number;
-  }>;
+  deployer: Deployer;
+  launchedOnFlaunch: boolean;
+  holderStatistics: HolderStatistics;
+  aiAnalysis?: AIAnalysis;
+  metadata: TokenMetadata;
 }
 
-// Main TokenAnalyticsData interface that matches the API response
-export interface TokenAnalyticsData {
+export interface TokenAnalysis {
   id: number;
   contractAddress: string;
-  tokenName: string;
-  tokenSymbol: string;
-  analysis: Analysis;
+  tokenName: string | null;
+  tokenSymbol: string | null;
+  analysis: TokenAnalysisData;
   score: number;
   createdAt: string;
-  imageUrl: string;
 }
 
-/*
- */
+export interface InsertTokenAnalysis {
+  contractAddress: string;
+  tokenName?: string | null;
+  tokenSymbol?: string | null;
+  createdAt: string;
+}

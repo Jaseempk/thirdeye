@@ -11,21 +11,24 @@ import {
   Loader2,
   Info,
   TrendingUp,
+  MessageSquare,
+  Send,
 } from "lucide-react";
 import { PieChart } from "react-minimal-pie-chart";
-import { TokenAnalyticsData } from "../types";
+import { TokenAnalysis } from "../types";
 import {
   formatAddress,
   formatNumber,
   formatPercentage,
   formatHolderPercentage,
+  calculateTokenAge,
 } from "../utils/formatters";
 
 import { getEthPrice } from "@/utils/price";
 
 interface TokenAnalyticsProps {
   address: string;
-  tokenData?: TokenAnalyticsData;
+  tokenData?: TokenAnalysis;
   onAnalyze: (address: string) => void;
   isLoading: boolean;
   error: string | null;
@@ -54,7 +57,7 @@ export const TokenAnalytics: React.FC<TokenAnalyticsProps> = ({
 
   const [ethPrice, setEthPrice] = React.useState<number>(0);
   const [builderScore, setBuilderScore] = React.useState<number>(0);
-
+  console.log("tokenData:", tokenData);
   React.useEffect(() => {
     const fetchEthPrice = async () => {
       const price = await getEthPrice();
@@ -64,7 +67,7 @@ export const TokenAnalytics: React.FC<TokenAnalyticsProps> = ({
 
     fetchEthPrice();
   }, []);
-
+  //0x1c93d155bd388241f9ab5df500d69eb529ce9583
   const mcInEth = formatNumber(
     Number(tokenData?.analysis?.deployer?.tokenInfo?.marketCap)
   );
@@ -116,7 +119,7 @@ export const TokenAnalytics: React.FC<TokenAnalyticsProps> = ({
           title: formatAddress(holders[0].address),
           value: holders[0].percentage,
           color: "#EB88EF",
-          isContract: holders[0].isContract,
+          isContract: holders[0].isContract ?? false,
           isSingleHolder: true,
         },
       ];
@@ -160,7 +163,7 @@ export const TokenAnalytics: React.FC<TokenAnalyticsProps> = ({
       title: formatAddress(holder.address),
       value: holder.percentage,
       color: colors[index % colors.length],
-      isContract: holder.isContract,
+      isContract: holder.isContract ?? false,
     }));
 
     // Add "Others" segment if there are more holders
@@ -255,10 +258,10 @@ export const TokenAnalytics: React.FC<TokenAnalyticsProps> = ({
           <div className="flex-1 min-w-0">
             <div className="flex items-center gap-4">
               {/* Token Image */}
-              {tokenData?.imageUrl ? (
+              {tokenData?.analysis.metadata?.logoUrl ? (
                 <img
-                  src={tokenData.imageUrl}
-                  alt={tokenData.tokenName}
+                  src={tokenData?.analysis.metadata?.logoUrl}
+                  alt={tokenData.tokenName ?? "Token Image"}
                   className="w-12 h-12 md:w-14 md:h-14 rounded-full object-cover ring-2 ring-primary/20 animate-float"
                 />
               ) : (
@@ -269,11 +272,44 @@ export const TokenAnalytics: React.FC<TokenAnalyticsProps> = ({
                 </div>
               )}
               <div className="min-w-0">
-                {" "}
-                {/* Ensures text truncation works */}
-                <h2 className="font-carbonic text-2xl md:text-3xl truncate">
-                  {tokenData?.tokenName}
-                </h2>
+                <div className="flex items-center gap-3">
+                  <h2 className="font-carbonic text-2xl md:text-3xl truncate">
+                    {tokenData?.tokenName}
+                  </h2>
+                  {/* Social Links */}
+                  <div className="flex items-center gap-2">
+                    {tokenData?.analysis.metadata?.social?.twitter && (
+                      <a
+                        href={tokenData.analysis.metadata.social.twitter}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="text-gray-400 hover:text-primary transition-colors p-1"
+                      >
+                        <Twitter className="w-4 h-4 md:w-5 md:h-5" />
+                      </a>
+                    )}
+                    {tokenData?.analysis.metadata?.social.discord && (
+                      <a
+                        href={tokenData.analysis.metadata.social.discord}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="text-gray-400 hover:text-primary transition-colors p-1"
+                      >
+                        <MessageSquare className="w-4 h-4 md:w-5 md:h-5" />
+                      </a>
+                    )}
+                    {tokenData?.analysis.metadata?.social.telegram && (
+                      <a
+                        href={tokenData.analysis.metadata.social.telegram}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="text-gray-400 hover:text-primary transition-colors p-1"
+                      >
+                        <Send className="w-4 h-4 md:w-5 md:h-5" />
+                      </a>
+                    )}
+                  </div>
+                </div>
                 <div className="flex items-center gap-2 mt-1">
                   <span className="text-gray-400 font-suisse text-sm md:text-base">
                     ${tokenData?.tokenSymbol}
@@ -350,6 +386,14 @@ export const TokenAnalytics: React.FC<TokenAnalyticsProps> = ({
               </div>
             </div>
             <div className="flex justify-between items-center">
+              <span className="text-gray-400">Age:</span>
+              <span>
+                {calculateTokenAge(
+                  Number(tokenData.analysis.metadata.createdAt)
+                )}
+              </span>
+            </div>
+            <div className="flex justify-between items-center">
               <span className="text-gray-400">Holders:</span>
               <span>{tokenData.analysis?.holderCount}</span>
             </div>
@@ -362,6 +406,15 @@ export const TokenAnalytics: React.FC<TokenAnalyticsProps> = ({
               <span>
                 {formatNumber(
                   Number(tokenData.analysis?.deployer?.tokenInfo?.volume24h)
+                )}
+              </span>
+            </div>
+            <div className="flex justify-between items-center">
+              <span className="text-gray-400">Liquidity:</span>
+              <span>
+                $
+                {formatNumber(
+                  Number(tokenData.analysis?.deployer.poolStats?.liquidity)
                 )}
               </span>
             </div>

@@ -4,14 +4,14 @@ import { ethers } from "ethers";
 import { useAccount } from "wagmi";
 import { getTokenInfo } from "../lib/web3";
 import { apiRequest } from "../lib/queryClient";
-import { TokenAnalyticsData } from "../types";
+import { TokenAnalysis } from "../types";
 
 export const useTokenAnalytics = () => {
   const [error, setError] = useState<string | null>(null);
   const { isConnected } = useAccount();
 
   const { mutateAsync, isPending: isLoading } = useMutation({
-    mutationFn: async (address: string): Promise<TokenAnalyticsData> => {
+    mutationFn: async (address: string): Promise<TokenAnalysis> => {
       if (!isConnected) {
         throw new Error("Please connect your wallet first");
       }
@@ -37,9 +37,9 @@ export const useTokenAnalytics = () => {
 
         return data;
       } catch (err) {
-        const message =
-          err instanceof Error ? err.message : "Failed to analyze token";
-        setError(message);
+        // const message =
+        //   err instanceof Error ? err.message : "Failed to analyze token";
+        setError("Failed to analyze token");
         throw err;
       }
     },

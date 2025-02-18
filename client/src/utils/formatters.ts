@@ -15,3 +15,19 @@ export const formatPercentage = (num: number): string => {
 export const formatHolderPercentage = (num: number): string => {
   return `${num.toFixed(2)}%`;
 };
+export const calculateTokenAge = (createdAt: number): string => {
+  const now = Math.floor(Date.now() / 1000); // Current time in seconds
+  const diffInSeconds = now - createdAt;
+  const days = Math.floor(diffInSeconds / (60 * 60 * 24));
+
+  if (days === 0) {
+    const hours = Math.floor(diffInSeconds / (60 * 60));
+    if (hours === 0) {
+      const minutes = Math.floor(diffInSeconds / 60);
+      return `${minutes} minute${minutes !== 1 ? "s" : ""} `;
+    }
+    return `${hours} hour${hours !== 1 ? "s" : ""} `;
+  }
+
+  return `${days} day${days !== 1 ? "s" : ""} `;
+};
