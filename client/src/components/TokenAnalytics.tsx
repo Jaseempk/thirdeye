@@ -57,7 +57,7 @@ export const TokenAnalytics: React.FC<TokenAnalyticsProps> = ({
 
   const [ethPrice, setEthPrice] = React.useState<number>(0);
   const [builderScore, setBuilderScore] = React.useState<number>(0);
-  console.log("tokenData:", tokenData);
+
   React.useEffect(() => {
     const fetchEthPrice = async () => {
       const price = await getEthPrice();
@@ -74,7 +74,6 @@ export const TokenAnalytics: React.FC<TokenAnalyticsProps> = ({
   const mcInUsd = Number(mcInEth) * ethPrice;
   if (tokenData?.analysis?.deployer?.address) {
     const fetchBuilderScore = async () => {
-      console.log("deployer:", tokenData?.analysis?.deployer?.address);
       const response = await fetch(
         `https://api.talentprotocol.com/api/v2/passports/${tokenData?.analysis?.deployer?.address}`,
         {
