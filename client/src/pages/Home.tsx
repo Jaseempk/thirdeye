@@ -124,6 +124,7 @@ export const Home: React.FC<HomeProps> = ({ onAnalyze }) => {
             non-retarded decisions in the trenches
           </p>
           <div className="flex flex-col sm:flex-row justify-center gap-4 max-w-2xl mx-auto">
+
             <div className="flex flex-col gap-4 w-full">
               <div className="flex-1 relative">
                 <input
@@ -152,6 +153,7 @@ export const Home: React.FC<HomeProps> = ({ onAnalyze }) => {
                 </button>
               </p>
             </div>
+
           </div>
         </div>
       </section>
@@ -350,12 +352,14 @@ export const Home: React.FC<HomeProps> = ({ onAnalyze }) => {
             <p className="font-suisse text-lg sm:text-xl text-gray-400 mb-8">
               Don't let the rugs pull you down. Start analyzing tokens now.
             </p>
+
             <button
               onClick={() => onAnalyze("")}
               className="bg-gradient-to-r from-[#E7692C] to-[#EB88EF] px-8 py-4 rounded-lg font-carbonic text-xl hover:opacity-90 transition-opacity inline-flex items-center gap-2"
             >
               Start Analyzing <ExternalLink className="w-5 h-5" />
             </button>
+
           </div>
         </div>
       </section>
