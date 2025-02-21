@@ -5,7 +5,7 @@ import {
   Search,
   ExternalLink,
   Twitter,
-  Sparkles,
+  // Sparkles,
   Siren,
   Bot,
   Crown,
@@ -19,10 +19,11 @@ import { useAccount } from "wagmi";
 
 interface HomeProps {
   onAnalyze: (address: string) => void;
+  onNavigate?: (page: "home" | "analysis" | "vote" | "terms") => void;
 }
 
 const tokenOfTheDay = {
-  name: "$TEYE",
+  name: "$SOON",
   address: "2PHi2f7xPq6bnh2J6xRN2Qc5TJ37epHihvBk49DgpAaU",
   imageUrl:
     "https://images.unsplash.com/photo-1639762681485-074b7f938ba0?auto=format&fit=crop&q=80&w=2832",
@@ -68,7 +69,7 @@ const roadmapItems = [
   },
 ];
 
-export const Home: React.FC<HomeProps> = ({ onAnalyze }) => {
+export const Home: React.FC<HomeProps> = ({ onAnalyze, onNavigate }) => {
   const [tokenAddress, setTokenAddress] = React.useState("");
   const { isConnected } = useAccount();
   const [showAlert, setShowAlert] = React.useState(true);
@@ -106,12 +107,12 @@ export const Home: React.FC<HomeProps> = ({ onAnalyze }) => {
       <section className="relative py-20 px-4 text-center">
         <div className="absolute inset-0 bg-gradient-to-r from-primary/5 to-accent/5 animate-gradient-x"></div>
         <div className="relative z-10">
-          <div className="inline-flex items-center gap-2 px-4 py-2 bg-green-500/20 rounded-full mb-6">
+          {/* <div className="inline-flex items-center gap-2 px-4 py-2 bg-green-500/20 rounded-full mb-6">
             <Sparkles className="w-4 h-4 text-green-400" />
             <span className="text-sm font-suisse text-green-400">
               420+ Rugs Prevented This Week
             </span>
-          </div>
+          </div> */}
           <h1 className="font-carbonic text-7xl mb-6 leading-tight">
             <span className="bg-gradient-to-r from-primary via-secondary to-accent text-transparent bg-clip-text">
               Detect Rugs Before
@@ -124,7 +125,6 @@ export const Home: React.FC<HomeProps> = ({ onAnalyze }) => {
             non-retarded decisions in the trenches
           </p>
           <div className="flex flex-col sm:flex-row justify-center gap-4 max-w-2xl mx-auto">
-
             <div className="flex flex-col gap-4 w-full">
               <div className="flex-1 relative">
                 <input
@@ -146,14 +146,13 @@ export const Home: React.FC<HomeProps> = ({ onAnalyze }) => {
                 Disclaimer: The model is in beta and actively being trained.
                 This is not a financial advice, see more at{" "}
                 <button
-                  onClick={() => (window.location.hash = "#/terms")}
+                  onClick={() => onNavigate?.("terms")}
                   className="text-primary hover:text-primary/80 transition-colors underline"
                 >
                   Terms and Conditions
                 </button>
               </p>
             </div>
-
           </div>
         </div>
       </section>
@@ -211,25 +210,21 @@ export const Home: React.FC<HomeProps> = ({ onAnalyze }) => {
       )}
 
       {/* Token of the Day */}
-      {isConnected && (
-        <section className="container mx-auto px-4 mb-20">
-          <div className="text-center mb-10">
-            <div className="inline-flex items-center gap-2 px-4 py-2 bg-primary/20 rounded-full mb-4">
-              <Crown className="w-4 h-4 text-primary" />
-              <span className="text-sm font-suisse">
-                Most Based Token Today
-              </span>
-            </div>
-            <h2 className="font-carbonic text-4xl mb-4">Ticker of the Day</h2>
-            <p className="font-suisse text-gray-400">
-              Most voted token by our based community
-            </p>
+      <section className="container mx-auto px-4 mb-20">
+        <div className="text-center mb-10">
+          <div className="inline-flex items-center gap-2 px-4 py-2 bg-primary/20 rounded-full mb-4">
+            <Crown className="w-4 h-4 text-primary" />
+            <span className="text-sm font-suisse">Most Based Token Today</span>
           </div>
-          <div className="max-w-2xl mx-auto">
-            <TokenCard {...tokenOfTheDay} />
-          </div>
-        </section>
-      )}
+          <h2 className="font-carbonic text-4xl mb-4">Ticker of the Day</h2>
+          <p className="font-suisse text-gray-400">
+            Most voted token by our based community
+          </p>
+        </div>
+        <div className="max-w-2xl mx-auto">
+          <TokenCard {...tokenOfTheDay} />
+        </div>
+      </section>
 
       {/* Roadmap Section */}
       <section className="container mx-auto px-4 py-12 md:py-20 mb-12 md:mb-20">
@@ -359,7 +354,6 @@ export const Home: React.FC<HomeProps> = ({ onAnalyze }) => {
             >
               Start Analyzing <ExternalLink className="w-5 h-5" />
             </button>
-
           </div>
         </div>
       </section>

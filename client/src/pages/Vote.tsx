@@ -31,7 +31,7 @@ export const Vote: React.FC = () => {
             {/* Title and Description */}
             <div className="flex-1">
               <div className="flex items-start gap-3 mb-4">
-                <h2 className="font-carbonic text-4xl sm:text-5xl md:text-6xl bg-gradient-to-r from-[#E7692C] to-[#EB88EF] text-transparent bg-clip-text">
+                <h2 className="font-serif text-4xl sm:text-5xl md:text-6xl bg-gradient-to-r  bg-clip-text">
                   Community Voting
                 </h2>
                 <Crown className="w-8 h-8 sm:w-10 sm:h-10 text-[#E7692C] animate-bounce" />
