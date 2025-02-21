@@ -212,7 +212,7 @@ export const Home: React.FC<HomeProps> = ({ onAnalyze, onNavigate }) => {
       {/* Token of the Day */}
       <section className="container mx-auto px-4 mb-20">
         <div className="text-center mb-10">
-          <div className="inline-flex items-center gap-2 px-4 py-2 bg-primary/20 rounded-full mb-4">
+          <div className="inline-flex items-center gap-2 px-4 py-2 bg-primary/20 rounded-full mb-4 mt-8">
             <Crown className="w-4 h-4 text-primary" />
             <span className="text-sm font-suisse">Most Based Token Today</span>
           </div>
