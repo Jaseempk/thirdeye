@@ -53,17 +53,27 @@ export async function generateAIAnalysis(analysisData: TokenAnalysisData) {
     Token Metadata:
     - Name: ${analysisData.metadata.name}
     - Symbol: ${analysisData.metadata.symbol}
-    - Description: ${analysisData.metadata.description || 'None'}
-    - Social Links: ${Object.values(analysisData.metadata.social).filter(Boolean).length} available
+    - Description: ${analysisData.metadata.description || "None"}
+    - Social Links: ${
+      Object.values(analysisData.metadata.social).filter(Boolean).length
+    } available
     - Market Cap: ${analysisData.metadata.marketCapETH} ETH
     - Pool Liquidity: ${analysisData.metadata.poolStats.liquidity}
     - Volume: ${analysisData.metadata.poolStats.volumeETH}
     
     Holder Statistics:
-    - Top 10 Holders Own: ${analysisData.holderStatistics.holderSupply.top10.supplyPercent}%
-    - Top 50 Holders Own: ${analysisData.holderStatistics.holderSupply.top50.supplyPercent}%
-    - 24h Holder Change: ${analysisData.holderStatistics.holderChange["24h"].change} (${analysisData.holderStatistics.holderChange["24h"].changePercent}%)
-    - 7d Holder Change: ${analysisData.holderStatistics.holderChange["7d"].change} (${analysisData.holderStatistics.holderChange["7d"].changePercent}%)
+    - Top 10 Holders Own: ${
+      analysisData.holderStatistics.holderSupply.top10.supplyPercent
+    }%
+    - Top 50 Holders Own: ${
+      analysisData.holderStatistics.holderSupply.top50.supplyPercent
+    }%
+    - 24h Holder Change: ${
+      analysisData.holderStatistics.holderChange["24h"].change
+    } (${analysisData.holderStatistics.holderChange["24h"].changePercent}%)
+    - 7d Holder Change: ${
+      analysisData.holderStatistics.holderChange["7d"].change
+    } (${analysisData.holderStatistics.holderChange["7d"].changePercent}%)
     
     Acquisition Methods:
     - Swap: ${analysisData.holderStatistics.holdersByAcquisition.swap}
@@ -74,12 +84,12 @@ export async function generateAIAnalysis(analysisData: TokenAnalysisData) {
     1) Initial liquidity and trading patterns
     2) Early holder distribution
     3) Social presence and project transparency
-    4) Immediate red flags or positive signals
+    4) Description and lore of the token's description
 
     Provide the analysis in this exact format:
     1) Liquidity and trading analysis
     2) Holder distribution analysis
-    3) Project transparency assessment
+    3) Potential for degen adoption based meme lore and crypto twitter sentiment for this lore and whether this can help in futur price pump or not.
     4) Risk summary
     Each insight must be 1-2 sentences.`;
 
