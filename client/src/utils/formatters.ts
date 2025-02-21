@@ -3,9 +3,9 @@ export const formatAddress = (address: string): string => {
   return `${address.slice(0, 6)}...${address.slice(-4)}`;
 };
 
-export const formatNumber = (num: number): string => {
+export const formatNumber = (num: number): number => {
   const scaledNum = num / Math.pow(10, 18);
-  return new Intl.NumberFormat().format(scaledNum);
+  return Number(scaledNum.toFixed(0));
 };
 
 export const formatPercentage = (num: number): string => {

@@ -14,7 +14,7 @@ import {
   CircleDot,
 } from "lucide-react";
 import { TokenCard } from "../components/TokenCard";
-import { ConnectButton } from "../components/ConnectButton";
+
 import { useAccount } from "wagmi";
 
 interface HomeProps {
@@ -124,43 +124,34 @@ export const Home: React.FC<HomeProps> = ({ onAnalyze }) => {
             non-retarded decisions in the trenches
           </p>
           <div className="flex flex-col sm:flex-row justify-center gap-4 max-w-2xl mx-auto">
-            {!isConnected ? (
-              <div className="flex flex-col items-center gap-4">
-                <ConnectButton />
-                <p className="text-gray-400 font-suisse text-sm">
-                  Connect your wallet to start analyzing tokens
-                </p>
+            <div className="flex flex-col gap-4 w-full">
+              <div className="flex-1 relative">
+                <input
+                  type="text"
+                  value={tokenAddress}
+                  onChange={(e) => setTokenAddress(e.target.value)}
+                  placeholder="Enter token address..."
+                  className="w-full bg-black/40 border border-primary/20 rounded-lg px-4 py-3 md:py-4 text-white font-suisse pr-24 md:pr-36 text-sm md:text-base"
+                />
+                <button
+                  onClick={() => onAnalyze(tokenAddress)}
+                  className="absolute right-2 top-1/2 -translate-y-1/2 bg-gradient-to-r from-[#E7692C] to-[#EB88EF] px-4 md:px-6 py-1.5 md:py-2 rounded-lg font-nohemi text-base md:text-xl hover:opacity-90 transition-opacity flex items-center gap-2"
+                >
+                  <Search className="w-4 h-4 md:w-5 md:h-5" />
+                  <span className="hidden sm:inline">Analyze</span>
+                </button>
               </div>
-            ) : (
-              <div className="flex flex-col gap-4 w-full">
-                <div className="flex-1 relative">
-                  <input
-                    type="text"
-                    value={tokenAddress}
-                    onChange={(e) => setTokenAddress(e.target.value)}
-                    placeholder="Enter token address..."
-                    className="w-full bg-black/40 border border-primary/20 rounded-lg px-4 py-3 md:py-4 text-white font-suisse pr-24 md:pr-36 text-sm md:text-base"
-                  />
-                  <button
-                    onClick={() => onAnalyze(tokenAddress)}
-                    className="absolute right-2 top-1/2 -translate-y-1/2 bg-gradient-to-r from-[#E7692C] to-[#EB88EF] px-4 md:px-6 py-1.5 md:py-2 rounded-lg font-nohemi text-base md:text-xl hover:opacity-90 transition-opacity flex items-center gap-2"
-                  >
-                    <Search className="w-4 h-4 md:w-5 md:h-5" />
-                    <span className="hidden sm:inline">Analyze</span>
-                  </button>
-                </div>
-                <p className="text-xs md:text-sm text-gray-400 font-suisse">
-                  Disclaimer: The model is in beta and actively being trained.
-                  This is not a financial advice, see more at{" "}
-                  <button
-                    onClick={() => (window.location.hash = "#/terms")}
-                    className="text-primary hover:text-primary/80 transition-colors underline"
-                  >
-                    Terms and Conditions
-                  </button>
-                </p>
-              </div>
-            )}
+              <p className="text-xs md:text-sm text-gray-400 font-suisse">
+                Disclaimer: The model is in beta and actively being trained.
+                This is not a financial advice, see more at{" "}
+                <button
+                  onClick={() => (window.location.hash = "#/terms")}
+                  className="text-primary hover:text-primary/80 transition-colors underline"
+                >
+                  Terms and Conditions
+                </button>
+              </p>
+            </div>
           </div>
         </div>
       </section>
@@ -359,16 +350,12 @@ export const Home: React.FC<HomeProps> = ({ onAnalyze }) => {
             <p className="font-suisse text-lg sm:text-xl text-gray-400 mb-8">
               Don't let the rugs pull you down. Start analyzing tokens now.
             </p>
-            {!isConnected ? (
-              <ConnectButton />
-            ) : (
-              <button
-                onClick={() => onAnalyze("")}
-                className="bg-gradient-to-r from-[#E7692C] to-[#EB88EF] px-8 py-4 rounded-lg font-carbonic text-xl hover:opacity-90 transition-opacity inline-flex items-center gap-2"
-              >
-                Start Analyzing <ExternalLink className="w-5 h-5" />
-              </button>
-            )}
+            <button
+              onClick={() => onAnalyze("")}
+              className="bg-gradient-to-r from-[#E7692C] to-[#EB88EF] px-8 py-4 rounded-lg font-carbonic text-xl hover:opacity-90 transition-opacity inline-flex items-center gap-2"
+            >
+              Start Analyzing <ExternalLink className="w-5 h-5" />
+            </button>
           </div>
         </div>
       </section>
