@@ -84,12 +84,12 @@ export async function generateAIAnalysis(analysisData: TokenAnalysisData) {
     1) Initial liquidity and trading patterns
     2) Early holder distribution
     3) Social presence and project transparency
-    4) Description and lore of the token's description
+    4) Description and lore of the token based on token name and description
 
     Provide the analysis in this exact format:
     1) Liquidity and trading analysis
     2) Holder distribution analysis
-    3) Potential for degen adoption based meme lore and crypto twitter sentiment for this lore and whether this can help in futur price pump or not.
+    3) Potential for degen adoption
     4) Risk summary
     Each insight must be 1-2 sentences.`;
 

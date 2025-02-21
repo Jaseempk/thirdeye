@@ -58,6 +58,7 @@ export const TokenAnalytics: React.FC<TokenAnalyticsProps> = ({
   const [ethPrice, setEthPrice] = React.useState<number>(0);
   const [builderScore, setBuilderScore] = React.useState<number>(0);
 
+  console.log("tokendata:", tokenData);
 
   React.useEffect(() => {
     const fetchEthPrice = async () => {
