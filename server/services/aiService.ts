@@ -41,59 +41,50 @@ const model = genAI.getGenerativeModel({
 
 export async function generateAIAnalysis(analysisData: TokenAnalysisData) {
   try {
-    const prompt = `Analyze this meme token data and provide EXACTLY 4 numbered insights focusing on early-stage risks. Score must be between 0 and 100:
-    
-    Token Info:
-    - Holder Count: ${analysisData.holderCount}
-    - Liquidity Score: ${analysisData.liquidityScore}
-    - Contract Verified: ${analysisData.contractVerified}
-    - Ownership Ratio: ${analysisData.ownershipRatio}%
-    - Launched on Flaunch: ${analysisData.launchedOnFlaunch}
-    
-    Token Metadata:
-    - Name: ${analysisData.metadata.name}
-    - Symbol: ${analysisData.metadata.symbol}
-    - Description: ${analysisData.metadata.description || "None"}
-    - Social Links: ${
-      Object.values(analysisData.metadata.social).filter(Boolean).length
-    } available
-    - Market Cap: ${analysisData.metadata.marketCapETH} ETH
-    - Pool Liquidity: ${analysisData.metadata.poolStats.liquidity}
-    - Volume: ${analysisData.metadata.poolStats.volumeETH}
-    
-    Holder Statistics:
-    - Top 10 Holders Own: ${
+    const prompt = `Analyze this fresh meme token like a degen who lives in VR. Give me 4 brutal assessments (0-100) with meme factor:
+
+    Token Stats:
+    - Holder Count: ${analysisData.holderCount} degens
+    - Liquidity Score: ${analysisData.liquidityScore} (1-100 how exit-able)
+    - Contract Verified: ${
+      analysisData.contractVerified
+        ? "✅ Not a honeypot"
+        : "🚩 Sketchy unsigned code"
+    }
+    - Top 10 Holders: ${
       analysisData.holderStatistics.holderSupply.top10.supplyPercent
-    }%
-    - Top 50 Holders Own: ${
+    }% supply (${
       analysisData.holderStatistics.holderSupply.top50.supplyPercent
-    }%
-    - 24h Holder Change: ${
-      analysisData.holderStatistics.holderChange["24h"].change
-    } (${analysisData.holderStatistics.holderChange["24h"].changePercent}%)
-    - 7d Holder Change: ${
-      analysisData.holderStatistics.holderChange["7d"].change
-    } (${analysisData.holderStatistics.holderChange["7d"].changePercent}%)
+    }% for top 50)
+    - Volume: ${analysisData.metadata.poolStats.volumeETH} ETH churn
     
-    Acquisition Methods:
-    - Swap: ${analysisData.holderStatistics.holdersByAcquisition.swap}
-    - Transfer: ${analysisData.holderStatistics.holdersByAcquisition.transfer}
-    - Airdrop: ${analysisData.holderStatistics.holdersByAcquisition.airdrop}
+    Meme Metrics:
+    - Name: ${analysisData.metadata.name} ${
+      analysisData.metadata.name.includes(" ") ? "🤮" : "✅"
+    } (spaceless?)
+    - Story: "${analysisData.metadata.description || "🚫 No narrative"}",
+    - Social Proof: ${
+      Object.values(analysisData.metadata.social).filter(Boolean).length
+    } links (TG/Twitter/Discord)
+    - Cultural Virus: ${
+      analysisData.metadata.name?.match(/[a-z]{4,}/gi)?.length || 0
+    } memeable words
 
-    Consider this is a newly minted meme token. Focus on:
-    1) Initial liquidity and trading patterns
-    2) Early holder distribution
-    3) Social presence and project transparency
-    4) Description and lore of the token based on token name and description
+    Assess through pixelated VR goggles:
+    1) Exit Strategy - Liquidity depth vs whale dumping risk
+    2) Meme DNA - Can this spark a cult? Relatability & meme potential
+    3) Smoke Signals - Real community or bot farm?
+    4) Degen Math - Risk/reward ratio for a 100x bag
 
-    Provide the analysis in this exact format:
-    1) Liquidity and trading analysis
-    2) Holder distribution analysis
-    3) Potential for degen adoption
-    4) Risk summary
-    Each insight must be 1-2 sentences.`;
+    Response format (1-2 sentences per point):
+      1) [🛑/🚀 Liquidity] 
+      2) [💩/🌕 Meme Power]
+      3) [🤖/❤️ Community Check]
+      4) [⚖️ Final Verdict]
+    Use emojis, degen slang, and meme references. Keep it real.`;
 
     const result = await model.generateContent(prompt);
+    console.log("Result: ", result);
     const response = JSON.parse(result.response.text());
 
     return {
